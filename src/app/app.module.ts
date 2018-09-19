@@ -15,12 +15,18 @@ import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 
-import { AppComponent, DialogContentComponent } from './app.component';
+import { AppComponent } from './app.component';
+import {DialogContentComponent} from './welcome/welcome.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { AppRoutingModule } from './app-routing.module';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DialogContentComponent
+    DialogContentComponent,
+    CalendarComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +44,8 @@ import { AppComponent, DialogContentComponent } from './app.component';
     MatDialogModule,
     MatListModule,
     MatGridListModule,
-    MatDividerModule
+    MatDividerModule,
+    AppRoutingModule
   ],
   entryComponents: [AppComponent, DialogContentComponent],
   providers: [],
