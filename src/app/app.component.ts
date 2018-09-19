@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
+// import {ErrorStateMatcher} from '@angular/material/core';
 import {MatDialog} from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
+/* export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
-}
+} */
 
 @Component({
   selector: 'app-root',
@@ -18,11 +18,12 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class AppComponent {
   title = 'my-project';
+  username = 'shadowkiler343';
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
   ]);
-  matcher = new MyErrorStateMatcher();
+  // matcher = new MyErrorStateMatcher();
   constructor(public dialog: MatDialog) {}
 
   openDialog(): void {
@@ -31,6 +32,16 @@ export class AppComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  logIn(f: NgForm) {
+    console.log(f.value);
+    f.reset();
+  }
+
+  signUp(signUpForm: NgForm) {
+    console.log(signUpForm.value);
+    // if all values are valid, reset form
   }
 }
 

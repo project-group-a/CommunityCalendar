@@ -12,6 +12,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatListModule} from '@angular/material/list';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatDividerModule} from '@angular/material/divider';
 
 import { AppComponent, DialogContentComponent } from './app.component';
 
@@ -34,7 +36,9 @@ import { AppComponent, DialogContentComponent } from './app.component';
     ReactiveFormsModule,
     MatTooltipModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    MatGridListModule,
+    MatDividerModule
   ],
   entryComponents: [AppComponent, DialogContentComponent],
   providers: [],

@@ -6,9 +6,6 @@
 .full-width {
     width: 100%;
 }
-.title-center {
-    margin: 0 auto;
-}
 .inline {
     display: inline-block;
     vertical-align: middle;
@@ -20,3 +17,15 @@
     width: 100%;
     text-align: center;
  }
+ .example-card {
+    max-width: 400px;
+}
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+}
+.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}
