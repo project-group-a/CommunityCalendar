@@ -15,7 +15,7 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
         <mat-card-content>
           <form class="form-css" #f="ngForm" (ngSubmit)="logIn(f)">
             <mat-form-field class="full-width">
-              <input matInput name="username" ngModel #username="ngModel" type="text" placeholder="Username">
+              <input matInput name="username" ngModel #username="ngModel" type="text" placeholder="Username" autofocus>
             </mat-form-field>
             <mat-form-field class="full-width">
               <input matInput name="password" ngModel type="password" placeholder="Password">
@@ -56,8 +56,10 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
     </mat-grid-tile>
   </mat-grid-list>
 </div>
+
 <br>
 <div>
+  <!-- TODO: get new card images; they should be around 400 x 350 -->
   <mat-grid-list cols="3" rowHeight="600px">
     <mat-grid-tile>
       <mat-card class="example-card">
