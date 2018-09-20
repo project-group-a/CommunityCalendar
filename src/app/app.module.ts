@@ -16,17 +16,23 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 
 import { AppComponent } from './app.component';
-import {DialogContentComponent} from './welcome/welcome.component';
+import {DialogContentComponent} from './header/header.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DialogContentComponent,
     CalendarComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    HeaderComponent,
+    FooterComponent,
+    SignUpSuccessComponent
   ],
   imports: [
     BrowserModule,
