@@ -15,9 +15,9 @@ const port = process.env.PORT || 3005;
 // https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
 let pool = mysql.createPool({
   host: 'localhost',
-  user: 'root',
-  password: 'rootpass',
-  database: 'sakila'
+  user: 'calendarApp',
+  password: 'calendarAppPass',
+  database: 'projectdb'
 });
 
 app.use(express.static(__dirname + '/dist/my-project'));
