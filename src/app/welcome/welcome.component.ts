@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
-import {DatabaseConnectionService} from '../database-connection.service';
+import {DatabaseConnectionService, TableData} from '../database-connection.service';
 
 /* tslint:disable no-shadowed-variable */
 @Component({
@@ -10,11 +10,12 @@ import {DatabaseConnectionService} from '../database-connection.service';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
+  tableData: TableData = {actor_id: -1, first_name: '', last_name: '', last_update: ''};
   constructor(private router: Router, private service: DatabaseConnectionService) { }
 
   ngOnInit() {
-    this.service.getTableData().subscribe((data: any) => {
-      console.log(data);
+    this.service.getTableData().subscribe((data: TableData) => {
+      this.tableData = data;
     }, (error) => {
       console.error('error getting data');
       console.error(error);

@@ -7,7 +7,6 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
-// const router = express.Router();
 
 const app = express();
 
@@ -29,7 +28,7 @@ app.get('/api/data', (req, res) => {
       console.log('error getting connection');
       throw err;
     } else {
-      pool.query('SELECT * FROM sakila.actor;', (err, rows, fields) => {
+      pool.query('SELECT * FROM sakila.actor LIMIT 10;', (err, rows, fields) => {
         if (err) {
           throw err;
         }
@@ -39,31 +38,9 @@ app.get('/api/data', (req, res) => {
   });
 });
 
-app.get('/*', (req, res) => res.sendFile(path.join(__dirname), (err) => {
-  if(err) {
-    res.status(500).send(err);
-  }
-}));
+app.get('/*', (req, res) => res.sendFile(path.join(__dirname)));
 
 
-app.listen(port);
-console.log(`app listening on port ${port}`);
-
-
-/* const server = http.createServer(app);
-
-server.listen(port, () => {
-  console.log('Running...');
-  pool.connect(function(err) {
-    if (err) {
-      throw err;
-    }
-    pool.query('SELECT * FROM sakila.actor;', (err, rows, fields) => {
-      if (err) {
-        throw err;
-      }
-      console.log(rows[0].first_name);
-    });
-    console.log('Connected to database!');
-  });
-}); */
+app.listen(port, () => {
+  console.log(`app listening on port ${port}`);
+});
