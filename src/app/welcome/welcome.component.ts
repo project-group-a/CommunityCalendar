@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
+import {DatabaseConnectionService} from '../database-connection.service';
 
+/* tslint:disable no-shadowed-variable */
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(private router: Router, private service: DatabaseConnectionService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.service.getTableData().subscribe((data: any) => {
+      console.log(data);
+    }, (error) => {
+      console.error('error getting data');
+      console.error(error);
+    });
+  }
 
   logIn(f: NgForm) {
     console.log('logIn form value:');

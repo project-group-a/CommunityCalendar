@@ -23,6 +23,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.compon
     MatListModule,
     MatGridListModule,
     MatDividerModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   entryComponents: [AppComponent, DialogContentComponent],
   providers: [],
