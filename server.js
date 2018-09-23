@@ -21,6 +21,7 @@ let pool = mysql.createPool({
 });
 
 app.use(express.static(__dirname + '/dist/my-project'));
+app.use(express.json());
 
 app.get('/api/data', (req, res) => {
   pool.getConnection(function(err) {
@@ -28,11 +29,32 @@ app.get('/api/data', (req, res) => {
       console.log('error getting connection');
       throw err;
     } else {
-      pool.query('SELECT * FROM sakila.actor LIMIT 10;', (err, rows, fields) => {
+      pool.query('SELECT * FROM auth', (err, rows, fields) => {
         if (err) {
+          console.log(err);
           throw err;
         }
         res.json(rows);
+      });
+    }
+  });
+});
+
+app.post('/api/addUser', (req, res) => {
+  console.log('hit addUser api; request:');
+  console.log(req.body);
+  const params = [req.body.username, req.body.pass, req.body.email];
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      throw err;
+    } else {
+      pool.query('INSERT INTO auth (username, pass, email) values (?)', [params], (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.json(200);
+        }
       });
     }
   });

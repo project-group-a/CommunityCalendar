@@ -48,8 +48,16 @@ export class WelcomeComponent implements OnInit {
 
     if (pass === pass2 && this.emailIsValid(email) && username.length > 0) {
       // TODO: if signed up, send to successful sign-up page; after ~10 seconds send back to home page
-      signUpForm.reset();
-      this.router.navigate(['signedUp']);
+      this.service.addUser(username, email, pass).subscribe((data: any) => {
+        console.log('add user successful:');
+        console.log(data);
+        signUpForm.reset();
+        this.router.navigate(['signedUp']);
+      }, (err: any) => {
+        console.error('add user failed: ');
+        console.error(err);
+        console.error(`Reason: ${err.error.sqlMessage}`);
+      });
     } else {
       // TODO: show error alert/message
     }
