@@ -1,4 +1,4 @@
 <!-- Routing: https://angular.io/tutorial/toh-pt5 -->
-<app-header></app-header>
-<router-outlet></router-outlet>
+<app-header [userLoggedIn]="userLoggedIn"></app-header>
+<router-outlet (activate)="changeOfRoutes()"></router-outlet>
 <app-footer></app-footer>

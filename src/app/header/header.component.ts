@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {MatDialog} from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,8 +8,8 @@ import {MatDialog} from '@angular/material';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
-  constructor(public dialog: MatDialog) { }
+  @Input() userLoggedIn = false;
+  constructor(public dialog: MatDialog, public router: Router) { }
 
   ngOnInit() {}
 
@@ -18,6 +19,13 @@ export class HeaderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  logout() {
+    // TODO: show logged out success message
+    localStorage.removeItem('projectgroupa_currentUser');
+    this.userLoggedIn = false;
+    this.router.navigate(['welcome']);
   }
 
 }

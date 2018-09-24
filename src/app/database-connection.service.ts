@@ -21,10 +21,19 @@ export interface TableData {
 export class DatabaseConnectionService {
   private readonly dataUrl = '/api/data';
   private readonly addUserUrl = '/api/addUser';
+  private readonly signInUrl = '/api/signIn';
   constructor(private http: HttpClient) {}
 
   getTableData() {
     return this.http.get<TableData>(this.dataUrl);
+  }
+
+  signIn(username: string, password: string) {
+    const requestBody = {
+      username,
+      pass: password
+    };
+    return this.http.post(this.signInUrl, requestBody, httpOptions);
   }
 
   addUser(username: string, email: string, password: string) {

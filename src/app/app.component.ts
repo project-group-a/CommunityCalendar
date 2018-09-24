@@ -6,6 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'my-project';
+  userLoggedIn = false;
   constructor() {}
+
+  changeOfRoutes() {
+    if (localStorage.getItem('projectgroupa_currentUser')) {
+      this.userLoggedIn = true;
+    } else {
+      this.userLoggedIn = false;
+    }
+  }
 }

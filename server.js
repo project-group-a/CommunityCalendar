@@ -29,7 +29,7 @@ app.get('/api/data', (req, res) => {
       console.log('error getting connection');
       throw err;
     } else {
-      pool.query('SELECT * FROM auth', (err, rows, fields) => {
+      pool.query('SELECT * FROM users', (err, rows, fields) => {
         if (err) {
           console.log(err);
           throw err;
@@ -40,6 +40,8 @@ app.get('/api/data', (req, res) => {
   });
 });
 
+// https://stackoverflow.com/questions/704194/how-to-hash-passwords-in-mysql
+// https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_sha2
 app.post('/api/addUser', (req, res) => {
   console.log('hit addUser api; request:');
   console.log(req.body);
@@ -47,13 +49,33 @@ app.post('/api/addUser', (req, res) => {
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
-      throw err;
+      res.status(500).json(err);
     } else {
-      pool.query('INSERT INTO auth (username, pass, email) values (?)', [params], (err, result) => {
+      pool.query(`INSERT INTO users (username, pass, email) values ('${req.body.username}',sha2('${req.body.pass}',256),'${req.body.email}')`, (err, result) => {
         if (err) {
           res.status(500).json(err);
         } else {
           res.json(200);
+        }
+      });
+    }
+  });
+});
+
+app.post('/api/signIn', (req, res) => {
+  console.log('hit signIn api; request:');
+  console.log(req.body);
+  const params = [req.body.username, req.body.pass];
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`select * from users where username = '${req.body.username}' and pass = sha2('${req.body.pass}',256)`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200).json(result);
         }
       });
     }

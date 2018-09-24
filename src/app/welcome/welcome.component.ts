@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
 import {DatabaseConnectionService, TableData} from '../database-connection.service';
@@ -25,13 +25,18 @@ export class WelcomeComponent implements OnInit {
   logIn(f: NgForm) {
     console.log('logIn form value:');
     console.log(f.value);
-    // TODO: if username/password works, send to calendar page
-    if (f.value.username === 'username' && f.value.password === 'password') {
-      this.router.navigate(['calendar']);
-    } else {
-      // TODO: if it doesn't, show error alert/message/modal
-      console.log('Cannot authenticate.');
-    }
+    // TODO: if username/password works, send to calendar page; else show error message
+    this.service.signIn(f.value.username, f.value.password).subscribe((data: any) => {
+      if (data.length > 0) {
+        localStorage.setItem('projectgroupa_currentUser', data[0].username);
+        this.router.navigate(['calendar']);
+      } else {
+        console.error('Username/password not in database');
+      }
+    }, (err: any) => {
+      console.error('sign in error:');
+      console.error(err);
+    });
     f.reset();
   }
 
@@ -47,7 +52,6 @@ export class WelcomeComponent implements OnInit {
     }
 
     if (pass === pass2 && this.emailIsValid(email) && username.length > 0) {
-      // TODO: if signed up, send to successful sign-up page; after ~10 seconds send back to home page
       this.service.addUser(username, email, pass).subscribe((data: any) => {
         console.log('add user successful:');
         console.log(data);

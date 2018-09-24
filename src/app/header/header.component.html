@@ -1,9 +1,9 @@
 <div style="text-align:center">
   <mat-toolbar color="primary">
-    <button mat-raised-button color="accent" routerLink="/welcome">Home</button>
-    <button mat-raised-button color="accent" style="margin-left: 7px;" routerLink="/calendar">Calendar</button>
+    <button mat-raised-button color="accent" [disabled]="userLoggedIn" routerLink="/welcome">Home</button>
+    <!-- <button mat-raised-button color="accent" style="margin-left: 7px;" routerLink="/calendar">Calendar</button> -->
     <span class="fill-remaining-space"></span>
     <button mat-raised-button (click)="openDialog()">About</button>
-    <!-- <button mat-raised-button style="margin-left: 7px">Logout</button> -->
+    <button mat-raised-button (click)="logout()" style="margin-left: 7px" *ngIf="userLoggedIn">Logout</button>
   </mat-toolbar>
 </div>
