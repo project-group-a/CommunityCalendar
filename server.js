@@ -84,7 +84,6 @@ app.post('/api/signIn', (req, res) => {
 
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname)));
 
-
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
