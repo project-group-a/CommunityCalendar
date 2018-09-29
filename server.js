@@ -4,7 +4,6 @@
 
 /* tslint:disable no-shadowed-variable */
 const express = require('express');
-const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
 
@@ -81,7 +80,6 @@ app.post('/api/signIn', (req, res) => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname));
-  // res.render(path.join(__dirname));
 });
 
 app.get('*', (req, res) => {
