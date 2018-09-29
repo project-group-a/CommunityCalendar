@@ -10,7 +10,7 @@ const mysql = require('mysql');
 
 const app = express();
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3005;
 
 // https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
 let pool = mysql.createPool({

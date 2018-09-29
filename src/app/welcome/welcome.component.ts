@@ -50,11 +50,16 @@ export class WelcomeComponent implements OnInit {
     const pass2 = signUpForm.value.password2;
 
     if (email === null || username === null || pass === null || pass2 === null) {
-      // TODO: show error alert/message
+      this.snackBar.open('Incomplete form entry', '', {
+        duration: 3000
+      });
       console.log('A value is null');
     }
 
-    if (pass === pass2 && this.emailIsValid(email) && username.length > 0) {
+    const passwordsValid: boolean = pass === pass2;
+    const emailValid: boolean = this.emailIsValid(email);
+    const usernameValid: boolean = username.length > 0;
+    if (passwordsValid && emailValid && usernameValid) {
       this.service.addUser(username, email, pass).subscribe((data: any) => {
         console.log('add user successful:');
         console.log(data);
@@ -64,9 +69,28 @@ export class WelcomeComponent implements OnInit {
         console.error('add user failed: ');
         console.error(err);
         console.error(`Reason: ${err.error.sqlMessage}`);
+        if (err.error.sqlMessage.includes('Duplicate entry')) {
+          this.snackBar.open('Username already taken', '', {
+            duration: 3000
+          });
+          const usernameTextBox = document.getElementById('signUpUsername');
+          if (usernameTextBox !== null) {
+            usernameTextBox.focus();
+          }
+        }
       });
     } else {
-      // TODO: show error alert/message
+      let message = '';
+      if (!passwordsValid) {
+        message = 'Passwords don\'t match';
+      } else if (!emailValid) {
+        message = 'Email needs to be of the form <email>@<site>';
+      } else if (!usernameValid) {
+        message = 'Username field needs to be filled out';
+      }
+      this.snackBar.open(message, '', {
+        duration: 3000
+      });
     }
   }
 
