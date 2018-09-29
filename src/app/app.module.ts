@@ -14,6 +14,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 import {DialogContentComponent} from './header/header.component';
@@ -53,7 +54,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatGridListModule,
     MatDividerModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule
   ],
   entryComponents: [AppComponent, DialogContentComponent],
   providers: [],

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
 import {DatabaseConnectionService, TableData} from '../database-connection.service';
+import { MatSnackBar } from '@angular/material';
 
 /* tslint:disable no-shadowed-variable */
 @Component({
@@ -11,7 +12,7 @@ import {DatabaseConnectionService, TableData} from '../database-connection.servi
 })
 export class WelcomeComponent implements OnInit {
   tableData: TableData = {actor_id: -1, first_name: '', last_name: '', last_update: ''};
-  constructor(private router: Router, private service: DatabaseConnectionService) { }
+  constructor(private router: Router, private service: DatabaseConnectionService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.service.getTableData().subscribe((data: TableData) => {
@@ -25,13 +26,15 @@ export class WelcomeComponent implements OnInit {
   logIn(f: NgForm) {
     console.log('logIn form value:');
     console.log(f.value);
-    // TODO: if username/password works, send to calendar page; else show error message
     this.service.signIn(f.value.username, f.value.password).subscribe((data: any) => {
       if (data.length > 0) {
         localStorage.setItem('projectgroupa_currentUser', data[0].username);
         this.router.navigate(['calendar']);
       } else {
         console.error('Username/password not in database');
+        this.snackBar.open(`Invalid username/password`, '', {
+          duration: 3000
+        });
       }
     }, (err: any) => {
       console.error('sign in error:');
