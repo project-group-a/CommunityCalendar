@@ -4,7 +4,6 @@
 
 /* tslint:disable no-shadowed-variable */
 const express = require('express');
-const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
 
@@ -63,9 +62,6 @@ app.post('/api/addUser', (req, res) => {
 });
 
 app.post('/api/signIn', (req, res) => {
-  console.log('hit signIn api; request:');
-  console.log(req.body);
-  const params = [req.body.username, req.body.pass];
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
@@ -82,8 +78,13 @@ app.post('/api/signIn', (req, res) => {
   });
 });
 
-app.get('/*', (req, res) => res.sendFile(path.join(__dirname)));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname));
+});
 
+app.get('*', (req, res) => {
+  res.redirect('/');
+});
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);

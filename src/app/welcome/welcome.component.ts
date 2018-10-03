@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
 import {DatabaseConnectionService, TableData} from '../database-connection.service';
+import { MatSnackBar } from '@angular/material';
 
 /* tslint:disable no-shadowed-variable */
 @Component({
@@ -11,7 +12,7 @@ import {DatabaseConnectionService, TableData} from '../database-connection.servi
 })
 export class WelcomeComponent implements OnInit {
   tableData: TableData = {actor_id: -1, first_name: '', last_name: '', last_update: ''};
-  constructor(private router: Router, private service: DatabaseConnectionService) { }
+  constructor(private router: Router, private service: DatabaseConnectionService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.service.getTableData().subscribe((data: TableData) => {
@@ -25,13 +26,15 @@ export class WelcomeComponent implements OnInit {
   logIn(f: NgForm) {
     console.log('logIn form value:');
     console.log(f.value);
-    // TODO: if username/password works, send to calendar page; else show error message
     this.service.signIn(f.value.username, f.value.password).subscribe((data: any) => {
       if (data.length > 0) {
         localStorage.setItem('projectgroupa_currentUser', data[0].username);
         this.router.navigate(['calendar']);
       } else {
         console.error('Username/password not in database');
+        this.snackBar.open(`Invalid username/password`, '', {
+          duration: 3000
+        });
       }
     }, (err: any) => {
       console.error('sign in error:');
@@ -47,11 +50,16 @@ export class WelcomeComponent implements OnInit {
     const pass2 = signUpForm.value.password2;
 
     if (email === null || username === null || pass === null || pass2 === null) {
-      // TODO: show error alert/message
+      this.snackBar.open('Incomplete form entry', '', {
+        duration: 3000
+      });
       console.log('A value is null');
     }
 
-    if (pass === pass2 && this.emailIsValid(email) && username.length > 0) {
+    const passwordsValid: boolean = pass === pass2;
+    const emailValid: boolean = this.emailIsValid(email);
+    const usernameValid: boolean = username.length > 0;
+    if (passwordsValid && emailValid && usernameValid) {
       this.service.addUser(username, email, pass).subscribe((data: any) => {
         console.log('add user successful:');
         console.log(data);
@@ -61,9 +69,28 @@ export class WelcomeComponent implements OnInit {
         console.error('add user failed: ');
         console.error(err);
         console.error(`Reason: ${err.error.sqlMessage}`);
+        if (err.error.sqlMessage.includes('Duplicate entry')) {
+          this.snackBar.open('Username already taken', '', {
+            duration: 3000
+          });
+          const usernameTextBox = document.getElementById('signUpUsername');
+          if (usernameTextBox !== null) {
+            usernameTextBox.focus();
+          }
+        }
       });
     } else {
-      // TODO: show error alert/message
+      let message = '';
+      if (!passwordsValid) {
+        message = 'Passwords don\'t match';
+      } else if (!emailValid) {
+        message = 'Email needs to be of the form <email>@<site>';
+      } else if (!usernameValid) {
+        message = 'Username field needs to be filled out';
+      }
+      this.snackBar.open(message, '', {
+        duration: 3000
+      });
     }
   }
 
