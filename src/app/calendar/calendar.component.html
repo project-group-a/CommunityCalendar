@@ -2,6 +2,17 @@
         - tui-calendar: https://github.com/nhnent/tui.calendar
         - full-calendar/ui-calendar (requires jQuery): https://angular-ui.github.io/ui-calendar/
         - angular-calender: https://github.com/mattlewis92/angular-calendar
+    CSS not loading? https://github.com/mattlewis92/angular-calendar/issues/77
 -->
 <p>Calendar will go here</p>
-<div id='calendar'></div>
+<div class="row text-center">
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+</div>
+<br>
+<div>
+  <mwl-calendar-month-view
+    [viewDate]="viewDate">
+  </mwl-calendar-month-view>
+</div>

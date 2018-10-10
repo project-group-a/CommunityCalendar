@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
-import {DatabaseConnectionService, TableData} from '../database-connection.service';
+import {DatabaseConnectionService} from '../database-connection.service';
 import { MatSnackBar } from '@angular/material';
 
 /* tslint:disable no-shadowed-variable */
@@ -11,11 +11,11 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-  tableData: TableData = {actor_id: -1, first_name: '', last_name: '', last_update: ''};
+  tableData: any;
   constructor(private router: Router, private service: DatabaseConnectionService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.service.getTableData().subscribe((data: TableData) => {
+    this.service.getTableData().subscribe((data: any) => {
       this.tableData = data;
     }, (error) => {
       console.error('error getting data');
