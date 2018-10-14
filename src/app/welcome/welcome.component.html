@@ -59,21 +59,39 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
 
 <br>
 <div>
-  <!-- TODO: get new card images; they should be around 400 x 350; place in \src\assets\ directory and set img source to that directory/image -->
-  <mat-grid-list cols="3" rowHeight="600px">
+  <!-- To get new card images; they should be around 400 x 350; 
+    place in \src\assets\ directory and set img source to that directory/image -->
+  <mat-grid-list cols="1" rowHeight="500px">
     <mat-grid-tile>
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>Project Group A</mat-card-title>
+          <mat-card-subtitle></mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="https://www.uscgranite.com/wp-content/uploads/2016/05/Omaha-1024x596.jpg" alt="Photo of a Shiba Inu">
+        <mat-card-content>
+          <p>
+            Welcome to the Local Omaha Events Calendar!
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>LIKE</button>
+          <button mat-button>SHARE</button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+    <!--<mat-grid-tile>
       <mat-card class="example-card">
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title>Shiba Inu</mat-card-title>
           <mat-card-subtitle>Dog Breed</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+        <img mat-card-image src="https://media.istockphoto.com/photos/puzzle-pieces-on-red-background-picture-id828819182?k=6&m=828819182&s=612x612&w=0&h=_6QWSqjsyzwT98yPo38RKZbj3gIF0wYCPvFYZO8KAqU=" alt="Photo of a Shiba Inu">
         <mat-card-content>
           <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
+            View local Omaha events and organize your own!
           </p>
         </mat-card-content>
         <mat-card-actions>
@@ -102,28 +120,7 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
           <button mat-button>SHARE</button>
         </mat-card-actions>
       </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-card class="example-card">
-        <mat-card-header>
-          <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>Shiba Inu</mat-card-title>
-          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-        </mat-card-header>
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-        <mat-card-content>
-          <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>LIKE</button>
-          <button mat-button>SHARE</button>
-        </mat-card-actions>
-      </mat-card>
-    </mat-grid-tile>
+    </mat-grid-tile>-->
   </mat-grid-list>
 </div>
 
