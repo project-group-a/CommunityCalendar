@@ -7,12 +7,34 @@
 <p></p>
 <div class="row text-center">
   <div class="col-md-4">
-    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    <mat-button-toggle-group #group="matButtonToggleGroup" [value]="view" (change)="onViewChange(group.value)">
+      <mat-button-toggle value="month">
+        Month
+      </mat-button-toggle>
+      <mat-button-toggle value="week">
+        Week
+      </mat-button-toggle>
+      <mat-button-toggle value="day">
+          Day
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 </div>
 <br>
-<div>
+<div [ngSwitch]="view">
   <mwl-calendar-month-view
-    [viewDate]="viewDate">
+    *ngSwitchCase="CalendarView.Month"
+    [viewDate]="viewDate"
+    [events]="events">
   </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="CalendarView.Week"
+    [viewDate]="viewDate"
+    [events]="events">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="CalendarView.Day"
+    [viewDate]="viewDate"
+    [events]="events">
+  </mwl-calendar-day-view>
 </div>
