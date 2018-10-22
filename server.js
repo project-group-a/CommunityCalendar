@@ -17,7 +17,7 @@ let pool = mysql.createPool({
   port: '3306',
   user: 'testCalendar',
   password: 'calendarAppPass',
-  database: 'calendarTest'
+  database: 'calendarDbFull'
 });
 
 app.use(express.static(__dirname + '/dist/my-project'));
@@ -29,7 +29,7 @@ app.get('/api/data', (req, res) => {
       console.log('error getting connection');
       throw err;
     } else {
-      pool.query('SELECT * FROM users', (err, rows, fields) => {
+      pool.query('SELECT * FROM User', (err, rows, fields) => {
         if (err) {
           console.log(err);
           throw err;
@@ -51,7 +51,7 @@ app.post('/api/addUser', (req, res) => {
       console.log('error getting connection');
       res.status(500).json(err);
     } else {
-      pool.query(`INSERT INTO users (username, pass, email) values ('${req.body.username}',sha2('${req.body.pass}',256),'${req.body.email}')`, (err, result) => {
+      pool.query(`INSERT INTO User (User_Name, User_Pass, Is_Admin, User_Email) VALUES ('${req.body.username}',sha2('${req.body.pass}',256),'0',${req.body.email}')`, (err, result) => {
         if (err) {
           res.status(500).json(err);
         } else {
@@ -68,7 +68,7 @@ app.post('/api/signIn', (req, res) => {
       console.log('error getting connection');
       res.status(500).json(err);
     } else {
-      pool.query(`select * from users where username = '${req.body.username}' and pass = sha2('${req.body.pass}',256)`, (err, result) => {
+      pool.query(`SELECT * FROM User WHERE User_Name = '${req.body.username}' AND User_Pass = sha2('${req.body.pass}',256)`, (err, result) => {
         if (err) {
           res.status(500).json(err);
         } else {
