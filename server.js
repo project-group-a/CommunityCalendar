@@ -51,7 +51,7 @@ app.post('/api/addUser', (req, res) => {
       console.log('error getting connection');
       res.status(500).json(err);
     } else {
-      pool.query(`INSERT INTO User (User_Name, User_Pass, Is_Admin, User_Email) VALUES ('${req.body.username}',sha2('${req.body.pass}',256),'0',${req.body.email}')`, (err, result) => {
+      pool.query(`INSERT INTO User (User_Name, User_Pass, Is_Admin, User_Email) VALUES ('${req.body.username}',sha2('${req.body.pass}',256),'0','${req.body.email}')`, (err, result) => {
         if (err) {
           res.status(500).json(err);
         } else {

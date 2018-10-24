@@ -17,6 +17,8 @@ export class WelcomeComponent implements OnInit {
   ngOnInit() {
     this.service.getTableData().subscribe((data: any) => {
       this.tableData = data;
+      console.log('user table data:');
+      console.log(data);
     }, (error) => {
       console.error('error getting data');
       console.error(error);
