@@ -82,6 +82,80 @@ app.post('/api/signIn', (req, res) => {
   });
 });
 
+app.post('/api/addEvent', (req, res) => {
+  console.log('hit add event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`INSERT INTO Event (Event_Name, Event_Date, Event_Type, Is_Approved) VALUES ('${req.body.name}', '${req.body.date}', '${req.body.type}', '0')`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200);
+        }
+      });
+    }
+  });
+});
+
+app.post('/api/editEvent', (req, res) => {
+  console.log('hit edit event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`UPDATE Event SET Event_Name = '${req.body.eventName}', Event_Date = '${req.body.eventDate}', Event_Type = '${req.body.eventType}' WHERE Event_Id = '${req.body.eventId}'`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200);
+        }
+      });
+    }
+  });
+});
+
+app.post('/api/deleteEvent', (req, res) => {
+  console.log('hit delete event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`DELETE FROM Event WHERE Event_Id = '${req.body.id}'`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200);
+        }
+      });
+    }
+  });
+});
+
+app.get('/api/getEvents', (req, res) => {
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      throw err;
+    } else {
+      pool.query('SELECT * FROM Event', (err, rows, fields) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        res.status(200).json(rows);
+      });
+    }
+  });
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname));
 });

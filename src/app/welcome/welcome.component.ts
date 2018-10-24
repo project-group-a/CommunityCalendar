@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
-import {DatabaseConnectionService, SignInData} from '../database-connection.service';
+import {DatabaseConnectionService, UserTableData} from '../database-connection.service';
 import { MatSnackBar } from '@angular/material';
 
 // https://www.npmjs.com/package/ngx-cookie-service
@@ -38,7 +38,7 @@ export class WelcomeComponent implements OnInit {
   logIn(f: NgForm) {
     console.log('logIn form value:');
     console.log(f.value);
-    this.service.signIn(f.value.username, f.value.password).subscribe((data: SignInData[]) => {
+    this.service.signIn(f.value.username, f.value.password).subscribe((data: UserTableData[]) => {
       if (data.length > 0) {
         this.cookieService.set(this.globalsService.cookieKey, data[0].User_Name, 3);
         this.router.navigate(['calendar']);
