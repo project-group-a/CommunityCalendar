@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalsService } from './globals.service';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +9,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   userLoggedIn = false;
-  constructor() {}
+  constructor(private cookieService: CookieService, private globalsService: GlobalsService) {}
 
   changeOfRoutes() {
-    if (localStorage.getItem('projectgroupa_currentUser')) {
+    if (this.cookieService.check(this.globalsService.cookieKey)) {
       this.userLoggedIn = true;
     } else {
       this.userLoggedIn = false;

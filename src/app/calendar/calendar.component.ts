@@ -22,7 +22,6 @@ import {DatabaseConnectionService} from '../database-connection.service';
 })
 
 export class CalendarComponent implements OnInit {
-
   colors: any = {
     red: {
       primary: '#ad2121',

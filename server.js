@@ -17,7 +17,7 @@ let pool = mysql.createPool({
   port: '3306',
   user: 'testCalendar',
   password: 'calendarAppPass',
-  database: 'calendarTest'
+  database: 'calendarDbFull'
 });
 
 app.use(express.static(__dirname + '/dist/my-project'));
@@ -29,7 +29,7 @@ app.get('/api/data', (req, res) => {
       console.log('error getting connection');
       throw err;
     } else {
-      pool.query('SELECT * FROM users', (err, rows, fields) => {
+      pool.query('SELECT * FROM User', (err, rows, fields) => {
         if (err) {
           console.log(err);
           throw err;
@@ -45,13 +45,12 @@ app.get('/api/data', (req, res) => {
 app.post('/api/addUser', (req, res) => {
   console.log('hit addUser api; request:');
   console.log(req.body);
-  const params = [req.body.username, req.body.pass, req.body.email];
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
       res.status(500).json(err);
     } else {
-      pool.query(`INSERT INTO users (username, pass, email) values ('${req.body.username}',sha2('${req.body.pass}',256),'${req.body.email}')`, (err, result) => {
+      pool.query(`INSERT INTO User (User_Name, User_Pass, Is_Admin, User_Email) VALUES ('${req.body.username}',sha2('${req.body.pass}',256),'0','${req.body.email}')`, (err, result) => {
         if (err) {
           res.status(500).json(err);
         } else {
@@ -63,17 +62,95 @@ app.post('/api/addUser', (req, res) => {
 });
 
 app.post('/api/signIn', (req, res) => {
+  console.log('hit sign in API; request:');
+  console.log(req.body);
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
       res.status(500).json(err);
     } else {
-      pool.query(`select * from users where username = '${req.body.username}' and pass = sha2('${req.body.pass}',256)`, (err, result) => {
+      pool.query(`SELECT * FROM User WHERE User_Name = '${req.body.username}' AND User_Pass = sha2('${req.body.pass}',256)`, (err, result) => {
         if (err) {
+          console.log('Error getting sign in data from database:');
+          console.log(err);
           res.status(500).json(err);
         } else {
           res.status(200).json(result);
         }
+      });
+    }
+  });
+});
+
+app.post('/api/addEvent', (req, res) => {
+  console.log('hit add event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`INSERT INTO Event (Event_Name, Event_Date, Event_Type, Is_Approved) VALUES ('${req.body.name}', '${req.body.date}', '${req.body.type}', '0')`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200);
+        }
+      });
+    }
+  });
+});
+
+app.post('/api/editEvent', (req, res) => {
+  console.log('hit edit event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`UPDATE Event SET Event_Name = '${req.body.eventName}', Event_Date = '${req.body.eventDate}', Event_Type = '${req.body.eventType}' WHERE Event_Id = '${req.body.eventId}'`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200);
+        }
+      });
+    }
+  });
+});
+
+app.post('/api/deleteEvent', (req, res) => {
+  console.log('hit delete event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      res.status(500).json(err);
+    } else {
+      pool.query(`DELETE FROM Event WHERE Event_Id = '${req.body.id}'`, (err, result) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          res.status(200);
+        }
+      });
+    }
+  });
+});
+
+app.get('/api/getEvents', (req, res) => {
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      throw err;
+    } else {
+      pool.query('SELECT * FROM Event', (err, rows, fields) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        res.status(200).json(rows);
       });
     }
   });

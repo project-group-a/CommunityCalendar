@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {MatDialog} from '@angular/material';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalsService } from '../globals.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +11,12 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Input() userLoggedIn = false;
-  constructor(public dialog: MatDialog, public router: Router) { }
+  constructor(
+    public dialog: MatDialog,
+    public router: Router,
+    private cookieService: CookieService,
+    private globalsService: GlobalsService
+  ) { }
 
   ngOnInit() {}
 
@@ -22,8 +29,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    // TODO: show logged out success message
-    localStorage.removeItem('projectgroupa_currentUser');
+    this.cookieService.delete(this.globalsService.cookieKey);
     this.userLoggedIn = false;
     this.router.navigate(['welcome']);
   }
