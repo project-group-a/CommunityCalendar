@@ -45,7 +45,6 @@ app.get('/api/data', (req, res) => {
 app.post('/api/addUser', (req, res) => {
   console.log('hit addUser api; request:');
   console.log(req.body);
-  const params = [req.body.username, req.body.pass, req.body.email];
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
@@ -63,6 +62,8 @@ app.post('/api/addUser', (req, res) => {
 });
 
 app.post('/api/signIn', (req, res) => {
+  console.log('hit sign in API; request:');
+  console.log(req.body);
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
@@ -70,6 +71,8 @@ app.post('/api/signIn', (req, res) => {
     } else {
       pool.query(`SELECT * FROM User WHERE User_Name = '${req.body.username}' AND User_Pass = sha2('${req.body.pass}',256)`, (err, result) => {
         if (err) {
+          console.log('Error getting sign in data from database:');
+          console.log(err);
           res.status(500).json(err);
         } else {
           res.status(200).json(result);

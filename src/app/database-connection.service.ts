@@ -8,6 +8,14 @@ const httpOptions = {
   })
 };
 
+export interface SignInData {
+  Calendar_Id: number;
+  Is_Admin: number;
+  User_Email: string;
+  User_Name: string;
+  User_Pass: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +34,7 @@ export class DatabaseConnectionService {
       username,
       pass: password
     };
-    return this.http.post(this.signInUrl, requestBody, httpOptions);
+    return this.http.post<SignInData[]>(this.signInUrl, requestBody, httpOptions);
   }
 
   addUser(username: string, email: string, password: string) {
