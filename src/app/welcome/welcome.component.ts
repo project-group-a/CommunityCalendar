@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
-import {DatabaseConnectionService} from '../database-connection.service';
+import {DatabaseConnectionService, UserTableData} from '../database-connection.service';
 import { MatSnackBar } from '@angular/material';
+
+// https://www.npmjs.com/package/ngx-cookie-service
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalsService } from '../globals.service';
 
 /* tslint:disable no-shadowed-variable */
 @Component({
@@ -12,11 +16,19 @@ import { MatSnackBar } from '@angular/material';
 })
 export class WelcomeComponent implements OnInit {
   tableData: any;
-  constructor(private router: Router, private service: DatabaseConnectionService, private snackBar: MatSnackBar) { }
+  constructor(
+    private router: Router,
+    private service: DatabaseConnectionService,
+    private snackBar: MatSnackBar,
+    private cookieService: CookieService,
+    private globalsService: GlobalsService
+  ) { }
 
   ngOnInit() {
     this.service.getTableData().subscribe((data: any) => {
       this.tableData = data;
+      console.log('user table data:');
+      console.log(data);
     }, (error) => {
       console.error('error getting data');
       console.error(error);
@@ -26,9 +38,9 @@ export class WelcomeComponent implements OnInit {
   logIn(f: NgForm) {
     console.log('logIn form value:');
     console.log(f.value);
-    this.service.signIn(f.value.username, f.value.password).subscribe((data: any) => {
+    this.service.signIn(f.value.username, f.value.password).subscribe((data: UserTableData[]) => {
       if (data.length > 0) {
-        localStorage.setItem('projectgroupa_currentUser', data[0].username);
+        this.cookieService.set(this.globalsService.cookieKey, data[0].User_Name, 3);
         this.router.navigate(['calendar']);
       } else {
         console.error('Username/password not in database');

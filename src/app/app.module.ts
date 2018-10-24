@@ -18,6 +18,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
+import { CookieService } from 'ngx-cookie-service';
+
 import { AppComponent } from './app.component';
 import {DialogContentComponent} from './header/header.component';
 import { CalendarComponent } from './calendar/calendar.component';
@@ -27,6 +29,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
 import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +67,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatSnackBarModule,
   ],
   entryComponents: [AppComponent, DialogContentComponent],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

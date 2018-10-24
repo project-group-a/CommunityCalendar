@@ -2,26 +2,39 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.2.
 
-## Development server
+# Development Instructions
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### What You'll Need
 
-## Code scaffolding
+- [Angular CLI](https://cli.angular.io/)
+- [Node.js](https://nodejs.org/en/)
+- [Filezilla](https://filezilla-project.org/)
+- [Git](https://git-scm.com/)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Useful Sites
 
-## Build
+- [Angular Docs](https://angular.io/)
+- [Angular Material Docs](https://material.angular.io/)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### To Run Locally
+1. Build the project using `ng build` and/or `ng build --prod` (only if using node.js to serve the project)
+2. In the base directory of the project, run `node server.js` to start the server; open your browser to localhost:3005 to see the project - it serves the files from the `dist\` directory created when running `ng build`
+3. You can also run `ng serve` but it won't have the database connection provided by the node.js backend (server.js); this serves the files straight from the `src\` folder
 
-## Running unit tests
+### Pushing to AWS EC2 Instance
+1. Using Filezilla (or equivalent program), sign in to the EC2 instance and open up the `server\` directory (might have to sudo cd to it)
+2. Delete/replace the existing files with the files from your computer
+3. Upload the new files to the `server\` directory; **do not upload `node_modules\` folders/files**
+4. Run `npm install`
+5. Run `ng build` **do not run `ng build --prod` - the server freezes up** (you can upload the `dist\` directory given by running `ng build --prod` on your computer instead)
+6. Delete the old pm2 running server with `pm2 delete server`
+7. Run `pm2 start server.js`
+8. Here's some pm2 process management stuff: http://pm2.keymetrics.io/docs/usage/process-management/
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Pushing to Git
+1. Download the Git for Windows client from above
+2. If needed, add the source code to a local repository (https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/)
+3. The remote repository URL for the project is: https://github.com/project-group-a/CommunityCalendar.git
+4. In base directory of the project, run `git add .`
+5. Run `git commit -m "commit message"`
+6. Run `git push origin master`

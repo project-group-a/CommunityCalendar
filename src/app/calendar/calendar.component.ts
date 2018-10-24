@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { 
+import {
   CalendarEvent,
   CalendarView
 } from 'angular-calendar';
@@ -21,7 +21,6 @@ import {
 })
 
 export class CalendarComponent implements OnInit {
-
   colors: any = {
     red: {
       primary: '#ad2121',

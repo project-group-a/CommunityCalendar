@@ -7,14 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./sign-up-success.component.css']
 })
 export class SignUpSuccessComponent implements OnInit {
-  timeleft = 10;
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    // setTimeout(function() {
-    //   this.toHomeScreen();
-    // }, 1000);
-  }
+  ngOnInit() {}
 
   toHomeScreen(): void {
     this.router.navigate(['welcome']);
