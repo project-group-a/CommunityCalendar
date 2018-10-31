@@ -13,6 +13,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import {DatabaseConnectionService} from '../database-connection.service';
 
 @Component({
   selector: 'app-calendar',
@@ -39,7 +40,6 @@ export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-  constructor() { }
   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
@@ -60,7 +60,27 @@ export class CalendarComponent implements OnInit {
       color: this.colors.yellow
     }
   ];
-  ngOnInit() {}
+
+  constructor(private service: DatabaseConnectionService) { }
+  ngOnInit() {
+    this.service.getEvents().subscribe((data: any) => {
+      for(var row of data){
+        this.events.push({
+          start: new Date(row["Event_Date_Start"]),
+          end: new Date(row["Event_Date_End"]),
+          title: row["Event_Name"],
+          meta: {
+            id: row["Event_Id"]
+          }
+        })
+      }
+      console.log('event table data:');
+      console.log(data);
+    }, (error) => {
+      console.error('error getting data');
+      console.error(error);
+    });
+  }
 
   public onViewChange(val: CalendarView) {
     this.view = val;
