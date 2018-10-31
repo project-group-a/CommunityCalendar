@@ -64,6 +64,17 @@ export class CalendarComponent implements OnInit {
   constructor(private service: DatabaseConnectionService) { }
   ngOnInit() {
     this.service.getEvents().subscribe((data: any) => {
+      for(var row of data){
+        this.events.push({
+          start: row["Event_Start_Date"],
+          end: row["Event_End_Date"],
+          title: row["Event_Name"],
+          meta: {
+            id: row["Event_Id"],
+            type: row["Event_Type"]
+          }
+        })
+      }
       console.log('event table data:');
       console.log(data);
     }, (error) => {
