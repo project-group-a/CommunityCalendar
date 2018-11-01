@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {MatDialog} from '@angular/material';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalsService } from '../globals.service';
+
 import {
   CalendarEvent,
   CalendarView
@@ -13,7 +18,10 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import {DatabaseConnectionService} from '../database-connection.service';
+
+
+
+
 
 @Component({
   selector: 'app-calendar',
@@ -40,6 +48,12 @@ export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
+  constructor(
+    public dialog: MatDialog,
+    public router: Router,
+    private cookieService: CookieService,
+    private globalsService: GlobalsService
+  ) { }
   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
@@ -60,25 +74,13 @@ export class CalendarComponent implements OnInit {
       color: this.colors.yellow
     }
   ];
+  ngOnInit() {}
 
-  constructor(private service: DatabaseConnectionService) { }
-  ngOnInit() {
-    this.service.getEvents().subscribe((data: any) => {
-      for(var row of data){
-        this.events.push({
-          start: new Date(row["Event_Date_Start"]),
-          end: new Date(row["Event_Date_End"]),
-          title: row["Event_Name"],
-          meta: {
-            id: row["Event_Id"]
-          }
-        })
-      }
-      console.log('event table data:');
-      console.log(data);
-    }, (error) => {
-      console.error('error getting data');
-      console.error(error);
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogContentComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
     });
   }
 
@@ -86,3 +88,9 @@ export class CalendarComponent implements OnInit {
     this.view = val;
   }
 }
+
+@Component({
+  selector: 'app-dialog-content-example-dialog',
+  templateUrl: '../addEventMenu.html',
+})
+export class DialogContentComponent {}
