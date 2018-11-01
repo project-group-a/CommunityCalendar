@@ -76,8 +76,8 @@ export class CalendarComponent implements OnInit {
   ];
   ngOnInit() {}
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogContentComponent);
+  openEventAdd(): void {
+    const dialogRef = this.dialog.open(AddEventComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
@@ -90,7 +90,7 @@ export class CalendarComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-dialog-content-example-dialog',
+  selector: 'app-add-event',
   templateUrl: '../addEventMenu.html',
 })
-export class DialogContentComponent {}
+export class AddEventComponent {}

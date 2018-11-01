@@ -23,6 +23,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import {DialogContentComponent} from './header/header.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { AddEventComponent} from './calendar/calendar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeaderComponent } from './header/header.component';
@@ -34,6 +35,7 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     DialogContentComponent,
+    AddEventComponent,
     CalendarComponent,
     WelcomeComponent,
     HeaderComponent,
@@ -66,7 +68,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatSnackBarModule,
   ],
-  entryComponents: [AppComponent, DialogContentComponent],
+  entryComponents: [AppComponent, DialogContentComponent, AddEventComponent],
   providers: [CookieService],
   bootstrap: [AppComponent]
 })
