@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
+import {NgForm} from '@angular/forms';
 
 import {
   CalendarEvent,
@@ -18,6 +20,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import { Subject } from 'rxjs';
 
 
 
@@ -25,6 +28,7 @@ import {
 
 @Component({
   selector: 'app-calendar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
@@ -47,8 +51,10 @@ export class CalendarComponent implements OnInit {
 
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
+  refresh: Subject<any> = new Subject();
   viewDate: Date = new Date();
   constructor(
+    public datePicker: MatDatepickerModule,
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService,
@@ -87,6 +93,23 @@ export class CalendarComponent implements OnInit {
   public onViewChange(val: CalendarView) {
     this.view = val;
   }
+
+  addEvent(f: NgForm): void {
+    this.events.push({
+      title: 'New event',
+      color: this.colors.red,
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      }
+    });
+    this.refresh.next();
+  }
+
+
 }
 
 @Component({

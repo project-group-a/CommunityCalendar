@@ -17,6 +17,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import { CookieService } from 'ngx-cookie-service';
 
@@ -30,6 +31,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
 import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     HttpClientModule,
     MatSnackBarModule,
+    MatDatepickerModule
   ],
   entryComponents: [AppComponent, DialogContentComponent, AddEventComponent],
   providers: [CookieService],
