@@ -1,13 +1,64 @@
 <h2 mat-dialog-title>Add Event</h2>
+<mat-form-field>
+    <input matInput [matDatepicker]="picker1" placeholder="Choose a start date" [(ngModel)]="inputStartDate">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1 ></mat-datepicker>
+</mat-form-field>
 <mat-dialog-content class="mat-typography">
-    <h3>Enter event title.</h3>
-    <p>*Form here*</p>
-    <h3>Event start date</h3>
-    <p>*Drop down here*</p>
-    <h3>Event end date</h3>
-    <p>*Drop down here*</p>
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+            <th>Title</th>
+            <th>Starts at</th>
+            <th>Ends at</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="event.title"
+                  (keyup)="refresh.next()">
+              </td>
+              <td>
+                  <!--<input
+                    class="form-control"
+                    type="text"
+                    mwlFlatpickr
+                    [(ngModel)]="event.start"
+                    (ngModelChange)="refresh.next()"
+                    
+                    [altInput]="true"
+                    [convertModelValue]="true"
+                    [enableTime]="true"
+                    
+                    dateFormat="Y-m-dTH:i"
+                    altFormat="F j, Y H:i"
+                    placeholder="Not set">-->
+                    
+                    
+                </td>
+                <!--<td>
+                  <input
+                    class="form-control"
+                    type="text"
+                    mwlFlatpickr
+                    [(ngModel)]="event.end"
+                    (ngModelChange)="refresh.next()"
+                    [altInput]="true"
+                    [convertModelValue]="true"
+                    [enableTime]="true"
+                    dateFormat="Y-m-dTH:i"
+                    altFormat="F j, Y H:i"
+                    placeholder="Not set">
+                </td>-->
+        </tbody>
+  </table>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Close</button>
+  <button mat-button (click)="addEvent()">Add Event</button>
 </mat-dialog-actions>
