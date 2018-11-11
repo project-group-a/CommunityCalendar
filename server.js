@@ -90,7 +90,7 @@ app.post('/api/signIn', (req, res) => {
 app.post('/api/addEvent', (req, res) => {
   console.log('hit add event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -109,7 +109,7 @@ app.post('/api/addEvent', (req, res) => {
 app.post('/api/editEvent', (req, res) => {
   console.log('hit edit event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err,connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -128,7 +128,7 @@ app.post('/api/editEvent', (req, res) => {
 app.post('/api/deleteEvent', (req, res) => {
   console.log('hit delete event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -145,7 +145,7 @@ app.post('/api/deleteEvent', (req, res) => {
 });
 
 app.get('/api/getCalendar', (req, res) => {
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -162,7 +162,7 @@ app.get('/api/getCalendar', (req, res) => {
 });
 
 app.get('/api/getEvents', (req, res) => {
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
