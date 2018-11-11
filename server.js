@@ -139,13 +139,30 @@ app.post('/api/deleteEvent', (req, res) => {
   });
 });
 
+app.get('/api/getCalendar', (req, res) => {
+  pool.getConnection(function(err) {
+    if (err) {
+      console.log('error getting connection');
+      throw err;
+    } else {
+      pool.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}')`, (err, rows, fields) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        res.status(200).json(rows);
+      });
+    }
+  });
+});
+
 app.get('/api/getEvents', (req, res) => {
   pool.getConnection(function(err) {
     if (err) {
       console.log('error getting connection');
       throw err;
     } else {
-      pool.query('SELECT * FROM Event', (err, rows, fields) => {
+      pool.query(`SELECT * FROM Event WHERE Event_Type <> 'private' AND Event_Name LIKE '%${req.query.search}%'`, (err, rows, fields) => {
         if (err) {
           console.log(err);
           throw err;
