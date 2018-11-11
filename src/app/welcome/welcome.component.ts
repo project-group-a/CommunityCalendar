@@ -41,6 +41,8 @@ export class WelcomeComponent implements OnInit {
     this.service.signIn(f.value.username, f.value.password).subscribe((data: UserTableData[]) => {
       if (data.length > 0) {
         this.cookieService.set(this.globalsService.cookieKey, data[0].User_Name, 3);
+        this.globalsService.username = data[0].User_Name;
+        this.globalsService.calendarid = data[0].Calendar_Id;
         this.router.navigate(['calendar']);
       } else {
         console.error('Username/password not in database');

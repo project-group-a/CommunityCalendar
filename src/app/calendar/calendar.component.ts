@@ -4,6 +4,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
+import {DatabaseConnectionService} from '../database-connection.service';
+import { Subject } from 'rxjs';
 import {NgForm} from '@angular/forms';
 
 import {
@@ -20,7 +22,6 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import { Subject } from 'rxjs';
 
 
 
@@ -53,34 +54,34 @@ export class CalendarComponent implements OnInit {
   CalendarView = CalendarView;
   refresh: Subject<any> = new Subject();
   viewDate: Date = new Date();
-  constructor(
-    public datePicker: MatDatepickerModule,
+  events: CalendarEvent[] = [];
+
+  constructor(public datePicker: MatDatepickerModule,
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService,
-    private globalsService: GlobalsService
-  ) { }
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'Test event 1',
-      color: this.colors.red,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      title: 'Test event 2',
-      color: this.colors.yellow
-    }
-  ];
-  ngOnInit() {}
+    private service: DatabaseConnectionService,
+    private globalsService: GlobalsService) { }
+  ngOnInit() {
+    this.service.getCalendar(this.globalsService.calendarid).subscribe((data: any) => {
+      for(var row of data){
+        this.events.push({
+          start: new Date(row["Event_Date_Start"]),
+          end: new Date(row["Event_Date_End"]),
+          title: row["Event_Name"],
+          meta: {
+            id: row["Event_Id"],
+            description: row["Event_Description"]
+          }
+        })
+      }
+      console.log('event table data:');
+      console.log(data);
+    }, (error) => {
+      console.error('error getting data');
+      console.error(error);
+    });
+  }
 
   openEventAdd(): void {
     const dialogRef = this.dialog.open(AddEventComponent);

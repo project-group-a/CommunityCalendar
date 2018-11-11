@@ -90,7 +90,7 @@ app.post('/api/signIn', (req, res) => {
 app.post('/api/addEvent', (req, res) => {
   console.log('hit add event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -109,7 +109,7 @@ app.post('/api/addEvent', (req, res) => {
 app.post('/api/editEvent', (req, res) => {
   console.log('hit edit event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err,connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -128,7 +128,7 @@ app.post('/api/editEvent', (req, res) => {
 app.post('/api/deleteEvent', (req, res) => {
   console.log('hit delete event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -144,13 +144,30 @@ app.post('/api/deleteEvent', (req, res) => {
   });
 });
 
-app.get('/api/getEvents', (req, res) => {
-  pool.getConnection(function(err) {
+app.get('/api/getCalendar', (req, res) => {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query('SELECT * FROM Event', (err, rows, fields) => {
+    connection.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}')`, (err, rows, fields) => {
+      connection.release();
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      res.status(200).json(rows);
+    });
+  });
+});
+
+app.get('/api/getEvents', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    connection.on('error', function(err) {
+      console.log('error getting connection:');
+      console.log(err);
+    });
+    connection.query(`SELECT * FROM Event WHERE Event_Type <> 'private' AND Event_Name LIKE '%${req.query.search}%'`, (err, rows, fields) => {
       connection.release();
       if (err) {
         console.log(err);

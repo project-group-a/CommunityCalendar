@@ -5,5 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class GlobalsService {
   readonly cookieKey = 'ProjectGroupA';
+  username: string = "";
+  calendarid: number = 0;
   constructor() { }
 }

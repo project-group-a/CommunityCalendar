@@ -1,0 +1,15 @@
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<mat-toolbar>
+    <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput type="text" [(ngModel)]="query" (keyup)="filter()">
+    </mat-form-field>
+</mat-toolbar>
+<mat-expansion-panel *ngFor="let event of events">
+    <mat-expansion-panel-header>
+        <mat-panel-title>{{event.title}}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <p>{{event.meta.description}}</p>
+</mat-expansion-panel>
