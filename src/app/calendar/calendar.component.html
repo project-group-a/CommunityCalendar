@@ -18,8 +18,11 @@
           Day
       </mat-button-toggle>
     </mat-button-toggle-group>
+    <button mat-raised-button (click)="openEventAdd()"style="float: right;">+ Add Event</button>
   </div>
 </div>
+
+
 <br>
 <div [ngSwitch]="view">
   <mwl-calendar-month-view

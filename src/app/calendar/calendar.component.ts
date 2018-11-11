@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalsService } from '../globals.service';
+import {DatabaseConnectionService} from '../database-connection.service';
+import { Subject } from 'rxjs';
+import {NgForm} from '@angular/forms';
+
 import {
   CalendarEvent,
   CalendarView
@@ -13,11 +22,14 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import {DatabaseConnectionService} from '../database-connection.service';
-import { GlobalsService } from '../globals.service';
+
+
+
+
 
 @Component({
   selector: 'app-calendar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
@@ -40,10 +52,15 @@ export class CalendarComponent implements OnInit {
 
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
+  refresh: Subject<any> = new Subject();
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
 
-  constructor(private service: DatabaseConnectionService,
+  constructor(public datePicker: MatDatepickerModule,
+    public dialog: MatDialog,
+    public router: Router,
+    private cookieService: CookieService,
+    private service: DatabaseConnectionService,
     private globalsService: GlobalsService) { }
   ngOnInit() {
     this.service.getCalendar(this.globalsService.calendarid).subscribe((data: any) => {
@@ -66,7 +83,38 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  openEventAdd(): void {
+    const dialogRef = this.dialog.open(AddEventComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
   public onViewChange(val: CalendarView) {
     this.view = val;
   }
+
+  addEvent(f: NgForm): void {
+    this.events.push({
+      title: 'New event',
+      color: this.colors.red,
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      }
+    });
+    this.refresh.next();
+  }
+
+
 }
+
+@Component({
+  selector: 'app-add-event',
+  templateUrl: '../addEventMenu.html',
+})
+export class AddEventComponent {}
