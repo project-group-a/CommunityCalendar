@@ -10,6 +10,10 @@
 <mat-expansion-panel *ngFor="let event of events">
     <mat-expansion-panel-header>
         <mat-panel-title>{{event.title}}</mat-panel-title>
+        <mat-panel-description>From {{event.start | date : long}} To {{event.end | date : long}}</mat-panel-description>
     </mat-expansion-panel-header>
     <p>{{event.meta.description}}</p>
+    <mat-action-row>
+        <button mat-raised-button (click)="subscribe(event.meta.id)">Subscribe</button>
+    </mat-action-row>
 </mat-expansion-panel>

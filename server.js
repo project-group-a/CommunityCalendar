@@ -144,6 +144,25 @@ app.post('/api/deleteEvent', (req, res) => {
   });
 });
 
+app.post('/api/subscribeToEvent', (req, res) => {
+  console.log('hit subscribe to event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err, connection) {
+    connection.on('error', function(err) {
+      console.log('error getting connection:');
+      console.log(err);
+    });
+    connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
+      connection.release();
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.status(200);
+      }
+    });
+  });
+});
+
 app.get('/api/getCalendar', (req, res) => {
   pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {DatabaseConnectionService} from '../database-connection.service';
+import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
+import { MatSnackBar } from '@angular/material';
 import {
     CalendarEvent
   } from 'angular-calendar';
@@ -13,7 +15,9 @@ import {
   export class ListComponent implements OnInit {
     events: CalendarEvent[] = []
     query: string = ""
-    constructor(private service: DatabaseConnectionService,
+    constructor(private snackBar: MatSnackBar,
+                private service: DatabaseConnectionService,
+                private cookieService: CookieService,
                 private globalsService: GlobalsService) { }
     ngOnInit(){
         this.filter()
@@ -34,6 +38,14 @@ import {
               }
             })
         }
+      })
+    }
+
+    public subscribe(id: number){
+      this.service.subscribeToEvent(this.cookieService.get("calendarid"), id.toString()).subscribe((data: any) => {
+        this.snackBar.open(`Event added to calendar`, '', {
+          duration: 3000
+        });
       })
     }
   }
