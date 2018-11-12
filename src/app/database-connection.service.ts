@@ -63,8 +63,8 @@ export class DatabaseConnectionService {
     return this.http.get<EventTableData[]>(this.getEventsUrl.replace("{query}", query));
   }
 
-  getCalendar(calendarid: number){
-    return this.http.get<EventTableData[]>(this.getCalendarUrl.replace("{Calendar_Id}", calendarid.toString()));
+  getCalendar(calendarid: string){
+    return this.http.get<EventTableData[]>(this.getCalendarUrl.replace("{Calendar_Id}", calendarid));
   }
 
   addEvent(name: string, date: string, type: string) {

@@ -63,7 +63,7 @@ export class CalendarComponent implements OnInit {
     private service: DatabaseConnectionService,
     private globalsService: GlobalsService) { }
   ngOnInit() {
-    this.service.getCalendar(this.globalsService.calendarid).subscribe((data: any) => {
+    this.service.getCalendar(this.cookieService.get("calendarid")).subscribe((data: any) => {
       for(var row of data){
         this.events.push({
           start: new Date(row["Event_Date_Start"]),
@@ -75,6 +75,7 @@ export class CalendarComponent implements OnInit {
           }
         })
       }
+      this.refresh.next()
       console.log('event table data:');
       console.log(data);
     }, (error) => {
