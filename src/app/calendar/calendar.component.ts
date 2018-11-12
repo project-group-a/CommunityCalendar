@@ -4,6 +4,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
+import {DatabaseConnectionService, UserTableData} from '../database-connection.service';
 import {NgForm} from '@angular/forms';
 
 import {
@@ -55,6 +56,7 @@ export class CalendarComponent implements OnInit {
   viewDate: Date = new Date();
   constructor(
     public datePicker: MatDatepickerModule,
+    private service: DatabaseConnectionService,
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService,
@@ -90,24 +92,13 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+
+
   public onViewChange(val: CalendarView) {
     this.view = val;
   }
 
-  addEvent(f: NgForm): void {
-    this.events.push({
-      title: 'New event',
-      color: this.colors.red,
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      }
-    });
-    this.refresh.next();
-  }
+
 
 
 }
@@ -116,4 +107,10 @@ export class CalendarComponent implements OnInit {
   selector: 'app-add-event',
   templateUrl: '../addEventMenu.html',
 })
-export class AddEventComponent {}
+export class AddEventComponent extends CalendarComponent {
+  addEvent(addEventForm: NgForm) {
+    const eventName = addEventForm.value.eventName;
+    const startDate = addEventForm.value.startDate;
+    const endDate = addEventForm.value.endDate;
+  }
+}
