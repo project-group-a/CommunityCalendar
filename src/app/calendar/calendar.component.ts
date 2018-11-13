@@ -92,8 +92,6 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-
-
   public onViewChange(val: CalendarView) {
     this.view = val;
   }
@@ -107,10 +105,24 @@ export class CalendarComponent implements OnInit {
   selector: 'app-add-event',
   templateUrl: '../addEventMenu.html',
 })
-export class AddEventComponent extends CalendarComponent {
+
+export class AddEventComponent {
+  eventName: Text = new Text();
+  startDate: Date = new Date();
+  endDate: Date = new Date();
+  type: String = 'type';
+
+  constructor(
+    private service: DatabaseConnectionService,
+    public dialog: MatDialog,
+    public router: Router,
+    private globalsService: GlobalsService
+  ) { }
   addEvent(addEventForm: NgForm) {
-    const eventName = addEventForm.value.eventName;
-    const startDate = addEventForm.value.startDate;
-    const endDate = addEventForm.value.endDate;
+    this.eventName = addEventForm.value.eventName;
+    this.startDate = addEventForm.value.startDate;
+    this.endDate = addEventForm.value.endDate;
+
+    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.StartDate.String, this.type.toString());
   }
 }
