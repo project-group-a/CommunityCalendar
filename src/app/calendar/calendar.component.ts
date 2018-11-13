@@ -4,12 +4,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
-<<<<<<< HEAD
 import {DatabaseConnectionService, UserTableData} from '../database-connection.service';
-=======
-import {DatabaseConnectionService} from '../database-connection.service';
 import { Subject } from 'rxjs';
->>>>>>> aa3daf04a2fd0f09bd506395b6f1c45255d5cb20
 import {NgForm} from '@angular/forms';
 
 import {
@@ -58,34 +54,28 @@ export class CalendarComponent implements OnInit {
   CalendarView = CalendarView;
   refresh: Subject<any> = new Subject();
   viewDate: Date = new Date();
-<<<<<<< HEAD
-  constructor(
-    public datePicker: MatDatepickerModule,
-    private service: DatabaseConnectionService,
-=======
   events: CalendarEvent[] = [];
 
   constructor(public datePicker: MatDatepickerModule,
->>>>>>> aa3daf04a2fd0f09bd506395b6f1c45255d5cb20
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService,
     private service: DatabaseConnectionService,
     private globalsService: GlobalsService) { }
   ngOnInit() {
-    this.service.getCalendar(this.cookieService.get("calendarid")).subscribe((data: any) => {
-      for(var row of data){
+    this.service.getCalendar(this.cookieService.get('calendarid')).subscribe((data: any) => {
+      for (const row of data) {
         this.events.push({
-          start: new Date(row["Event_Date_Start"]),
-          end: new Date(row["Event_Date_End"]),
-          title: row["Event_Name"],
+          start: new Date(row['Event_Date_Start']),
+          end: new Date(row['Event_Date_End']),
+          title: row['Event_Name'],
           meta: {
-            id: row["Event_Id"],
-            description: row["Event_Description"]
+            id: row['Event_Id'],
+            description: row['Event_Description']
           }
-        })
+        });
       }
-      this.refresh.next()
+      this.refresh.next();
       console.log('event table data:');
       console.log(data);
     }, (error) => {
