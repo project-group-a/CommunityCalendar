@@ -31,7 +31,8 @@ export class DatabaseConnectionService {
   private readonly dataUrl = '/api/data';
   private readonly addUserUrl = '/api/addUser';
   private readonly signInUrl = '/api/signIn';
-  private readonly getEventsUrl = '/api/getEvents';
+  private readonly getEventsUrl = '/api/getEvents?search={query}';
+  private readonly getCalendarUrl = '/api/getCalendar?Calendar_Id={Calendar_Id}'
   private readonly addEventUrl = '/api/addEvent';
   private readonly editEventUrl = '/api/editEvent';
   private readonly deleteEventUrl = '/api/deleteEvent';
@@ -58,8 +59,12 @@ export class DatabaseConnectionService {
     return this.http.post(this.addUserUrl, requestBody, httpOptions);
   }
 
-  getEvents() {
-    return this.http.get<EventTableData[]>(this.getEventsUrl);
+  getEvents(query: string) {
+    return this.http.get<EventTableData[]>(this.getEventsUrl.replace("{query}", query));
+  }
+
+  getCalendar(calendarid: string){
+    return this.http.get<EventTableData[]>(this.getCalendarUrl.replace("{Calendar_Id}", calendarid));
   }
 
   addEvent(name: string, date: string, type: string) {

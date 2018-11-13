@@ -1,0 +1,39 @@
+import { Component, OnInit } from '@angular/core';
+import {DatabaseConnectionService} from '../database-connection.service';
+import { GlobalsService } from '../globals.service';
+import {
+    CalendarEvent
+  } from 'angular-calendar';
+@Component({
+    selector: 'app-list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.css']
+  })
+
+  export class ListComponent implements OnInit {
+    events: CalendarEvent[] = []
+    query: string = ""
+    constructor(private service: DatabaseConnectionService,
+                private globalsService: GlobalsService) { }
+    ngOnInit(){
+        this.filter()
+    }
+
+    public filter(){
+      this.events = []
+      this.service.getEvents(this.query).subscribe((data: any) => {
+        for(var row of data){
+            this.events.push({
+              start: new Date(row["Event_Date_Start"]),
+              end: new Date(row["Event_Date_End"]),
+              title: row["Event_Name"],
+              meta: {
+                id: row["Event_Id"],
+                description: row["Event_Description"],
+                owner: row["Event_Owner"]
+              }
+            })
+        }
+      })
+    }
+  }
