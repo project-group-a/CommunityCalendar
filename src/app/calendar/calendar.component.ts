@@ -23,10 +23,6 @@ import {
   addHours
 } from 'date-fns';
 
-
-
-
-
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,

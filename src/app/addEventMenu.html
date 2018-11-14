@@ -1,11 +1,56 @@
 <h2 mat-dialog-title>Add Event</h2>
 <mat-dialog-content class="mat-typography">
-  
-        
-  <form class="form-css" #addEventForm="ngForm" (ngSubmit)="addEvent(form)">
-    <mat-form-field>
-      <input matInput name="eventName" ngModel type="text" placeholder="Event Name">
-    </mat-form-field>
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+            <th>Title</th>
+            <th>Starts at</th>
+            <th>Ends at</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="event.title">
+                  <!-- (keyup)="refresh.next()"> -->
+              </td>
+              <td>
+                  <!--<input
+                    class="form-control"
+                    type="text"
+                    mwlFlatpickr
+                    [(ngModel)]="event.start"
+                    (ngModelChange)="refresh.next()"
+                    
+                    [altInput]="true"
+                    [convertModelValue]="true"
+                    [enableTime]="true"
+                    
+                    dateFormat="Y-m-dTH:i"
+                    altFormat="F j, Y H:i"
+                    placeholder="Not set">-->
+                    
+                    
+                </td>
+                <!--<td>
+                  <input
+                    class="form-control"
+                    type="text"
+                    mwlFlatpickr
+                    [(ngModel)]="event.end"
+                    (ngModelChange)="refresh.next()"
+                    [altInput]="true"
+                    [convertModelValue]="true"
+                    [enableTime]="true"
+                    dateFormat="Y-m-dTH:i"
+                    altFormat="F j, Y H:i"
+                    placeholder="Not set">
+                </td>-->
+        </tbody>
+  </table>
 
     <mat-form-field>
       <input matInput name="startDate" ngForm type="datetime-local" placeholder="Start Date" autofocus>
