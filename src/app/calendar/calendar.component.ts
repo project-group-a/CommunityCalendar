@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
@@ -91,10 +92,6 @@ export class CalendarComponent implements OnInit {
   public onViewChange(val: CalendarView) {
     this.view = val;
   }
-
-
-
-
 }
 
 @Component({
@@ -103,10 +100,7 @@ export class CalendarComponent implements OnInit {
 })
 
 export class AddEventComponent {
-  eventName: Text = new Text();
-  startDate: Date = new Date();
-  endDate: Date = new Date();
-  type: String = 'type';
+  type = 'type';
 
   constructor(
     private service: DatabaseConnectionService,
@@ -115,10 +109,9 @@ export class AddEventComponent {
     private globalsService: GlobalsService
   ) { }
   addEvent(addEventForm: NgForm) {
-    this.eventName = addEventForm.value.eventName;
-    this.startDate = addEventForm.value.startDate;
-    this.endDate = addEventForm.value.endDate;
-
-    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.StartDate.String, this.type.toString());
+    console.log('hit addEvent method');
+    console.log('start date:');
+    console.log(addEventForm.value.startDate);
+    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.startDate, this.type);
   }
 }

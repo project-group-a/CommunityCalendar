@@ -115,11 +115,7 @@ app.post('/api/addEvent', (req, res) => {
 app.post('/api/editEvent', (req, res) => {
   console.log('hit edit event API; request:');
   console.log(req.body);
-<<<<<<< Updated upstream
-  pool.getConnection(function(err,connection) {
-=======
   pool.getConnection(function(err, connection) {
->>>>>>> Stashed changes
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -172,10 +168,7 @@ app.get('/api/getCalendar', (req, res) => {
 });
 
 app.get('/api/getEvents', (req, res) => {
-<<<<<<< Updated upstream
-=======
   console.log('hit get events api...');
->>>>>>> Stashed changes
   pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
