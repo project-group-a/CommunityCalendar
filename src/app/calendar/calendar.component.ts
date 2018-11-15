@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
-import {DatabaseConnectionService} from '../database-connection.service';
+import {DatabaseConnectionService, UserTableData} from '../database-connection.service';
 import { Subject } from 'rxjs';
 import {NgForm} from '@angular/forms';
 
@@ -22,10 +23,6 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-
-
-
-
 
 @Component({
   selector: 'app-calendar',
@@ -63,19 +60,19 @@ export class CalendarComponent implements OnInit {
     private service: DatabaseConnectionService,
     private globalsService: GlobalsService) { }
   ngOnInit() {
-    this.service.getCalendar(this.cookieService.get("calendarid")).subscribe((data: any) => {
-      for(var row of data){
+    this.service.getCalendar(this.cookieService.get('calendarid')).subscribe((data: any) => {
+      for (const row of data) {
         this.events.push({
-          start: new Date(row["Event_Date_Start"]),
-          end: new Date(row["Event_Date_End"]),
-          title: row["Event_Name"],
+          start: new Date(row['Event_Date_Start']),
+          end: new Date(row['Event_Date_End']),
+          title: row['Event_Name'],
           meta: {
-            id: row["Event_Id"],
-            description: row["Event_Description"]
+            id: row['Event_Id'],
+            description: row['Event_Description']
           }
-        })
+        });
       }
-      this.refresh.next()
+      this.refresh.next();
       console.log('event table data:');
       console.log(data);
     }, (error) => {
@@ -95,27 +92,26 @@ export class CalendarComponent implements OnInit {
   public onViewChange(val: CalendarView) {
     this.view = val;
   }
-
-  addEvent(f: NgForm): void {
-    this.events.push({
-      title: 'New event',
-      color: this.colors.red,
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      }
-    });
-    this.refresh.next();
-  }
-
-
 }
 
 @Component({
   selector: 'app-add-event',
   templateUrl: '../addEventMenu.html',
 })
-export class AddEventComponent {}
+
+export class AddEventComponent {
+  type = 'type';
+
+  constructor(
+    private service: DatabaseConnectionService,
+    public dialog: MatDialog,
+    public router: Router,
+    private globalsService: GlobalsService
+  ) { }
+  addEvent(addEventForm: NgForm) {
+    console.log('hit addEvent method');
+    console.log('start date:');
+    console.log(addEventForm.value.startDate);
+    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.startDate, this.type);
+  }
+}
