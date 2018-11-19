@@ -119,6 +119,7 @@ export class AddEventComponent {
     private globalsService: GlobalsService
   ) { }
   addEvent(addEventForm: NgForm) {
+    console.log('hit addEvent component');
     this.eventName = addEventForm.value.eventName;
     this.startDate = addEventForm.value.startDate;
     this.endDate = addEventForm.value.endDate;

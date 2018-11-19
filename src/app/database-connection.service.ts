@@ -74,6 +74,8 @@ export class DatabaseConnectionService {
       date,
       type
     };
+    console.log('add Event request body:');
+    console.log(requestBody);
     return this.http.post(this.addEventUrl, requestBody, httpOptions);
   }
 
