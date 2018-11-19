@@ -1,22 +1,20 @@
 <h2 mat-dialog-title>Add Event</h2>
 <mat-dialog-content class="mat-typography">
-  
-        
-  <form class="form-css" #addEventForm="ngForm" (ngSubmit)="addEvent(form)">
+  <form #addEventForm="ngForm" (ngSubmit)="logIn(addEventForm)">
     <mat-form-field>
-      <input matInput name="eventName" ngModel type="text" placeholder="Event Name">
+      <input matInput name="eventName" ngModel #eventName="ngModel" type="text" placeholder="Event Name" autofocus>
     </mat-form-field>
-
     <mat-form-field>
-      <input matInput name="startDate" ngForm type="datetime-local" placeholder="Start Date" autofocus>
+      <input matInput [matDatepicker]="startDate" name="startDate" ngModel placeholder="Start Date">
+      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+      <mat-datepicker #startDate></mat-datepicker>
     </mat-form-field>
-  
     <mat-form-field>
-        <input matInput name="endDate" ngForm type="datetime-local" placeholder="End Date">
+      <input matInput [matDatepicker]="endDate" name="endDate" ngModel placeholder="End Date">
+      <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+      <mat-datepicker #endDate></mat-datepicker>
     </mat-form-field>
-    <button type="submit" style="display:none"></button>
   </form>
-        
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Close</button>

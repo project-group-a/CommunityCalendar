@@ -3,13 +3,19 @@
 - https://expressjs.com/en/guide/database-integration.html#mysql
 - https://www.terlici.com/2015/08/13/mysql-node-express.html
 - https://www.w3schools.com/nodejs/nodejs_mysql.asp
+
+Unit Tests:
+  - https://stackoverflow.com/questions/37502809/what-are-the-spec-ts-files-generated-by-angular-cli-for
+  - npm junit: https://www.npmjs.com/package/junit
 */
 
 /* tslint:disable no-shadowed-variable */
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
-/* TODO: use logging api (https://github.com/log4js-node/log4js-node) */
+/* TODO: use logging api? (https://github.com/log4js-node/log4js-node) */
+/* TODO: confetti on adding event? (https://github.com/daniel-lundin/dom-confetti) */
+/* TODO: send email invitation: (https://www.w3schools.com/nodejs/nodejs_email.asp) */
 
 const app = express();
 
@@ -75,7 +81,6 @@ app.post('/api/signIn', (req, res) => {
       console.log(err);
     });
     connection.query(`SELECT * FROM User WHERE User_Name = '${req.body.username}' AND User_Pass = sha2('${req.body.pass}',256)`, (err, result) => {
-      connection.release();
       if (err) {
         console.log('Error getting sign in data from database:');
         console.log(err);
@@ -83,7 +88,8 @@ app.post('/api/signIn', (req, res) => {
       } else {
         res.status(200).json(result);
       }
-    });
+    }); // end connection/query()
+    connection.release();
   });
 });
 
@@ -109,7 +115,7 @@ app.post('/api/addEvent', (req, res) => {
 app.post('/api/editEvent', (req, res) => {
   console.log('hit edit event API; request:');
   console.log(req.body);
-  pool.getConnection(function(err,connection) {
+  pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
       console.log(err);
@@ -162,6 +168,7 @@ app.get('/api/getCalendar', (req, res) => {
 });
 
 app.get('/api/getEvents', (req, res) => {
+  console.log('hit get events api...');
   pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
