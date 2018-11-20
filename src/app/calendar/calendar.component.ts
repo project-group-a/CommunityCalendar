@@ -100,27 +100,22 @@ export class CalendarComponent implements OnInit {
 })
 
 export class AddEventComponent {
-  type = 'type';
+  type = 'Private';
+  isApproved = '1';
+  owner = this.cookieService.get('User_Name');
 
   constructor(
     private service: DatabaseConnectionService,
     public dialog: MatDialog,
     public router: Router,
+    private cookieService: CookieService,
     private globalsService: GlobalsService
   ) { }
   addEvent(addEventForm: NgForm) {
-<<<<<<< HEAD
-    console.log('hit addEvent component');
-    this.eventName = addEventForm.value.eventName;
-    this.startDate = addEventForm.value.startDate;
-    this.endDate = addEventForm.value.endDate;
-
-    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.StartDate.String, this.type.toString());
-=======
     console.log('hit addEvent method');
     console.log('start date:');
     console.log(addEventForm.value.startDate);
-    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.startDate, this.type);
->>>>>>> febda8232914a36866596761d31288b535ee559c
+    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.eventDescription,
+      addEventForm.value.startDate, addEventForm.value.endDate, this.type, this.isApproved, this.owner);
   }
 }
