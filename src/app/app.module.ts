@@ -32,6 +32,7 @@ import {DialogContentComponent} from './header/header.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ListComponent } from './list/list.component';
 import { AddEventComponent} from './calendar/calendar.component';
+import { ViewEventComponent} from './calendar/calendar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeaderComponent } from './header/header.component';
@@ -45,6 +46,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     DialogContentComponent,
     AddEventComponent,
+    ViewEventComponent,
     CalendarComponent,
     ListComponent,
     WelcomeComponent,
@@ -81,7 +83,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  entryComponents: [AppComponent, DialogContentComponent, AddEventComponent],
+  entryComponents: [AppComponent, DialogContentComponent, AddEventComponent, ViewEventComponent],
   providers: [CookieService, MatDatepickerModule],
   bootstrap: [AppComponent]
 })

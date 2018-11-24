@@ -1,14 +1,12 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import { MatDialog, MatSnackBar, MatNativeDateModule} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
 import {DatabaseConnectionService, UserTableData} from '../database-connection.service';
 import { Subject } from 'rxjs';
-import {NgForm} from '@angular/forms';
-
+import { NgForm, FormControl, FormGroup } from '@angular/forms';
 import {
   CalendarEvent,
   CalendarView
@@ -81,6 +79,18 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  eventClicked({event}: {event: CalendarEvent}): void {
+    const dialogRef = this.dialog.open(ViewEventComponent);
+    dialogRef.componentInstance.eventId = event.meta.id;
+    dialogRef.componentInstance.title = event.title;
+    dialogRef.componentInstance.startDate = event.start;
+    dialogRef.componentInstance.endDate = event.end != null ? event.end : new Date();
+    dialogRef.componentInstance.setValues();
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
   openEventAdd(): void {
     const dialogRef = this.dialog.open(AddEventComponent);
 
@@ -113,5 +123,66 @@ export class AddEventComponent {
     console.log('start date:');
     console.log(addEventForm.value.startDate);
     this.service.addEvent(addEventForm.value.eventName, addEventForm.value.startDate, this.type);
+  }
+}
+
+@Component({
+  selector: 'app-view-event',
+  templateUrl: '../viewEventMenu.html',
+})
+export class ViewEventComponent{
+ 
+  form: FormGroup = new FormGroup({});
+  editMode: boolean = false;
+  eventId: string = "";
+  title: string = "";
+  startDate: Date = new Date();
+  endDate: Date = new Date();
+
+  constructor(
+    private snackBar: MatSnackBar,
+    private service: DatabaseConnectionService,
+    public dialog: MatDialog,
+    public router: Router,
+    private globalsService: GlobalsService
+  ) { 
+  }
+
+  setValues(){
+    this.form = new FormGroup({
+      eventName : new FormControl({value: this.title, disabled:true}),
+      startDate : new FormControl({value: this.startDate, disabled:true}),
+      endDate: new FormControl({value: this.endDate, disabled:true})
+    });
+  }
+
+  editEvent(){
+    this.editMode = true;
+    this.form.setValue({
+      eventName : this.title,
+      startDate : this.startDate,
+      endDate: this.endDate
+    });
+    this.form.enable();
+  }
+
+  viewEvent(){
+    this.editMode = false;
+    this.form.setValue({
+      eventName : this.title,
+      startDate : this.startDate,
+      endDate: this.endDate
+    });
+    this.form.disable();
+  }
+
+  submitEdits(editEventForm: NgForm){
+    this.service.editEvent(this.eventId, editEventForm.value.eventName, 
+      editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '), 
+      editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
+      this.snackBar.open(`Event edits saved`, '', {
+        duration: 3000
+      });
+    })
   }
 }

@@ -80,12 +80,12 @@ export class DatabaseConnectionService {
     return this.http.post(this.addEventUrl, requestBody, httpOptions);
   }
 
-  editEvent(eventId: string, eventName: string, eventDate: string, eventType: string) {
+  editEvent(eventId: string, eventName: string, eventStart: string, eventEnd: string) {
     const requestBody = {
       eventId,
       eventName,
-      eventDate,
-      eventType
+      eventStart,
+      eventEnd
     };
     return this.http.post(this.editEventUrl, requestBody, httpOptions);
   }

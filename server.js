@@ -120,7 +120,7 @@ app.post('/api/editEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`UPDATE Event SET Event_Name = '${req.body.eventName}', Event_Date = '${req.body.eventDate}', Event_Type = '${req.body.eventType}' WHERE Event_Id = '${req.body.eventId}'`, (err, result) => {
+    connection.query(`UPDATE Event SET Event_Name = '${req.body.eventName}', Event_Date_Start = '${req.body.eventStart}', Event_Date_End = '${req.body.eventEnd}' WHERE Event_Id = '${req.body.eventId}'`, (err, result) => {
       connection.release();
       if (err) {
         res.status(500).json(err);
