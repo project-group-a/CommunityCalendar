@@ -66,7 +66,10 @@ export class CalendarComponent implements OnInit {
           title: row['Event_Name'],
           meta: {
             id: row['Event_Id'],
-            description: row['Event_Description']
+            description: row['Event_Description'],
+            owner: row['Event_Owner'],
+            type: row['Event_Type'],
+            is_approved: row['Is_Approved']
           }
         });
       }
@@ -85,6 +88,10 @@ export class CalendarComponent implements OnInit {
     dialogRef.componentInstance.title = event.title;
     dialogRef.componentInstance.startDate = event.start;
     dialogRef.componentInstance.endDate = event.end != null ? event.end : new Date();
+    dialogRef.componentInstance.description = event.meta.description;
+    dialogRef.componentInstance.owner = event.meta.owner;
+    dialogRef.componentInstance.type = event.meta.type;
+    dialogRef.componentInstance.isEventOwner = (event.meta.owner == this.cookieService.get(this.globalsService.cookieKey))
     dialogRef.componentInstance.setValues();
 
     dialogRef.afterClosed().subscribe(result => {
@@ -138,13 +145,17 @@ export class ViewEventComponent{
   title: string = "";
   startDate: Date = new Date();
   endDate: Date = new Date();
+  description: string = "";
+  owner: string = "";
+  type: string = "";
+  isEventOwner: boolean = false;
 
   constructor(
     private snackBar: MatSnackBar,
     private service: DatabaseConnectionService,
     public dialog: MatDialog,
     public router: Router,
-    private globalsService: GlobalsService
+    private cookieService: CookieService
   ) { 
   }
 
@@ -176,11 +187,27 @@ export class ViewEventComponent{
     this.form.disable();
   }
 
+  deleteEvent(){
+    this.service.deleteEvent(this.eventId).subscribe((data: any) => {
+      this.snackBar.open(`Event deleted from app`, '', {
+        duration: 3000
+      });
+    });
+  }
+
   submitEdits(editEventForm: NgForm){
     this.service.editEvent(this.eventId, editEventForm.value.eventName, 
       editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '), 
       editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
       this.snackBar.open(`Event edits saved`, '', {
+        duration: 3000
+      });
+    })
+  }
+
+  unsubscribe(){
+    this.service.unsubscribeFromEvent(this.cookieService.get('calendarid'), this.eventId).subscribe((data: any) => {
+      this.snackBar.open(`Event removed from calendar`, '', {
         duration: 3000
       });
     })

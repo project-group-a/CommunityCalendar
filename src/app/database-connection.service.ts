@@ -37,6 +37,7 @@ export class DatabaseConnectionService {
   private readonly editEventUrl = '/api/editEvent';
   private readonly deleteEventUrl = '/api/deleteEvent';
   private readonly subscribeToEventUrl = '/api/subscribeToEvent';
+  private readonly unsubscribeFromEventUrl = '/api/unsubscribeFromEvent';
   constructor(private http: HttpClient) {}
 
   getTableData() {
@@ -90,7 +91,7 @@ export class DatabaseConnectionService {
     return this.http.post(this.editEventUrl, requestBody, httpOptions);
   }
 
-  deleteEvent(eventId: number) {
+  deleteEvent(eventId: string) {
     const requestBody = {
       id: eventId
     };
@@ -103,5 +104,13 @@ export class DatabaseConnectionService {
       eventid: eventId
     };
     return this.http.post(this.subscribeToEventUrl, requestBody, httpOptions);
+  }
+
+  unsubscribeFromEvent(calendarId: string, eventId: string){
+    const requestBody = {
+      calendarid: calendarId,
+      eventid: eventId
+    };
+    return this.http.post(this.unsubscribeFromEventUrl, requestBody, httpOptions);
   }
 }

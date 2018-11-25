@@ -140,12 +140,19 @@ app.post('/api/deleteEvent', (req, res) => {
       console.log(err);
     });
     connection.query(`DELETE FROM Event WHERE Event_Id = '${req.body.id}'`, (err, result) => {
-      connection.release();
       if (err) {
         res.status(500).json(err);
-      } else {
-        res.status(200);
       }
+      else {
+        connection.query(`DELETE FROM Calendar WHERE Event_Id = '${req.body.id}'`, (err, result) => {
+          connection.release();
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            res.status(200);
+          }
+        });
+      } 
     });
   });
 });
@@ -159,6 +166,25 @@ app.post('/api/subscribeToEvent', (req, res) => {
       console.log(err);
     });
     connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
+      connection.release();
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.status(200);
+      }
+    });
+  });
+});
+
+app.post('/api/unsubscribeFromEvent', (req, res) => {
+  console.log('hit unsubscribe from event API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err, connection) {
+    connection.on('error', function(err) {
+      console.log('error getting connection:');
+      console.log(err);
+    });
+    connection.query(`DELETE FROM Calendar WHERE Calendar_Id = '${req.body.calendarid}' AND Event_Id = '${req.body.eventid}'`, (err, result) => {
       connection.release();
       if (err) {
         res.status(500).json(err);

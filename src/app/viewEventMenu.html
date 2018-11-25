@@ -17,11 +17,17 @@
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" *ngIf="isEventOwner">
+    <button mat-button (click)="deleteEvent()" mat-dialog-close>Delete</button>
     <button mat-button (click)="submitEdits(editEventForm)" [disabled]="!editMode">Save Changes</button>
     <button mat-button mat-dialog-close>Close</button>
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-    <mat-button-toggle (click)="viewEvent()">View</mat-button-toggle>
-    <mat-button-toggle (click)="editEvent()">Edit</mat-button-toggle>
+      <mat-button-toggle (click)="viewEvent()">View</mat-button-toggle>
+      <mat-button-toggle (click)="editEvent()">Edit</mat-button-toggle>
     </mat-button-toggle-group>
+</mat-dialog-actions>
+
+<mat-dialog-actions align="end" *ngIf="!isEventOwner">
+  <button mat-button (click)="unsubscribe()" mat-dialog-close>Unsubscribe</button>
+  <button mat-button mat-dialog-close>Close</button>
 </mat-dialog-actions>
