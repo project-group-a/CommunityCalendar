@@ -5,10 +5,15 @@
       <input matInput name="eventName" ngModel #eventName="ngModel" type="text" placeholder="Event Name" autofocus>
     </mat-form-field>
     <mat-form-field>
+      <input matInput name="eventDescription" ngModel #eventName="ngModel" type="text" placeholder="Event Description" autofocus>
+    </mat-form-field>
+    <p></p>
+    <mat-form-field>
       <input matInput [matDatepicker]="startDate" name="startDate" ngModel placeholder="Start Date">
       <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
       <mat-datepicker #startDate></mat-datepicker>
     </mat-form-field>
+    <p></p>
     <mat-form-field>
       <input matInput [matDatepicker]="endDate" name="endDate" ngModel placeholder="End Date">
       <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>

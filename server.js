@@ -101,7 +101,7 @@ app.post('/api/addEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Event (Event_Name, Event_Date, Event_Type, Is_Approved) VALUES ('${req.body.name}', '${req.body.date}', '${req.body.type}', '0')`, (err, result) => {
+    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) SELECT '${req.body.eventName}', '${req.body.eventDescription}', User_Name, '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '1' FROM User WHERE User_Name = '${req.body.owner}';`, (err, result) => {
       connection.release();
       if (err) {
         res.status(500).json(err);
