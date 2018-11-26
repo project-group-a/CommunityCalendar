@@ -37,6 +37,7 @@ export class DatabaseConnectionService {
   private readonly editEventUrl = '/api/editEvent';
   private readonly deleteEventUrl = '/api/deleteEvent';
   private readonly subscribeToEventUrl = '/api/subscribeToEvent';
+  private readonly subscribeFromNotificationUrl = '/api/subscribeFromNotificationEvent';
   private readonly unsubscribeFromEventUrl = '/api/unsubscribeFromEvent';
   constructor(private http: HttpClient) {}
 
@@ -110,6 +111,14 @@ export class DatabaseConnectionService {
       eventid: eventId
     };
     return this.http.post(this.subscribeToEventUrl, requestBody, httpOptions);
+  }
+
+  subscribeFromNotification(calendarId: string, eventId: string) {
+    const requestBody = {
+      calendarid: calendarId,
+      eventid: eventId
+    };
+    return this.http.post(this.subscribeFromNotificationUrl, requestBody, httpOptions)
   }
 
   unsubscribeFromEvent(calendarId: string, eventId: string){

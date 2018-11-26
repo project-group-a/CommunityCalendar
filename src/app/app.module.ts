@@ -31,6 +31,7 @@ import { AppComponent } from './app.component';
 import {DialogContentComponent} from './header/header.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ListComponent } from './list/list.component';
+import { NotificationComponent } from './notification/notification.component';
 import { AddEventComponent} from './calendar/calendar.component';
 import { ViewEventComponent} from './calendar/calendar.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -49,6 +50,7 @@ import { HttpClientModule } from '@angular/common/http';
     ViewEventComponent,
     CalendarComponent,
     ListComponent,
+    NotificationComponent,
     WelcomeComponent,
     HeaderComponent,
     FooterComponent,
