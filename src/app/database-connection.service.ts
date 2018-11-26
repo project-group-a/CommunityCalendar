@@ -24,6 +24,7 @@ export interface EventTableData {
   Is_Approved: number;
 }
 
+/* tslint:disable max-line-length */
 @Injectable({
   providedIn: 'root'
 })
@@ -40,10 +41,6 @@ export class DatabaseConnectionService {
   private readonly getNotificationUrl = '/api/getNotification?Calendar_Id={Calendar_Id}';
   private readonly unsubscribeFromEventUrl = '/api/unsubscribeFromEvent';
   constructor(private http: HttpClient) {}
-
-  getTableData() {
-    return this.http.get<any>(this.dataUrl);
-  }
 
   signIn(username: string, password: string) {
     const requestBody = {
@@ -70,7 +67,7 @@ export class DatabaseConnectionService {
     return this.http.get<EventTableData[]>(this.getCalendarUrl.replace('{Calendar_Id}', calendarid));
   }
 
-  addEvent(eventName: string, eventDescription: string, startDate: Date, endDate: Date, type: string, isApproved: string, owner: string) {
+  addEvent(eventName: string, eventDescription: string, startDate: string, endDate: string, type: string, isApproved: string, owner: string) {
     // date should be in the format 'YYYY-MM-DD HH:MM:SS'
     const requestBody = {
       eventName,
@@ -81,11 +78,9 @@ export class DatabaseConnectionService {
       isApproved,
       owner
     };
-
-
     console.log('hit add event in connection service; requestbody:');
     console.log(requestBody);
-    return this.http.post(this.addEventUrl, requestBody, httpOptions);
+    return this.http.post<any>(this.addEventUrl, requestBody, httpOptions);
   }
 
   editEvent(eventId: string, eventName: string, eventStart: string, eventEnd: string) {
@@ -113,11 +108,20 @@ export class DatabaseConnectionService {
     return this.http.post(this.subscribeToEventUrl, requestBody, httpOptions);
   }
 
+<<<<<<< HEAD
   getNotification(calendarid: string) {
     return this.http.get<EventTableData[]>(this.getNotificationUrl.replace('{Calendar_Id}', calendarid));
+=======
+  subscribeFromNotification(calendarId: string, eventId: string) {
+    const requestBody = {
+      calendarid: calendarId,
+      eventid: eventId
+    };
+    return this.http.post(this.subscribeFromNotificationUrl, requestBody, httpOptions);
+>>>>>>> b1f62446b10ddf073330328e27e96b6c7577ce0f
   }
 
-  unsubscribeFromEvent(calendarId: string, eventId: string){
+  unsubscribeFromEvent(calendarId: string, eventId: string) {
     const requestBody = {
       calendarid: calendarId,
       eventid: eventId

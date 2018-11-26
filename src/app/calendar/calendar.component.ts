@@ -11,24 +11,14 @@ import {
   CalendarEvent,
   CalendarView
 } from 'angular-calendar';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
 
+/* tslint:disable max-line-length */
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-
 export class CalendarComponent implements OnInit {
   colors: any = {
     red: {
@@ -115,11 +105,10 @@ export class CalendarComponent implements OnInit {
   selector: 'app-add-event',
   templateUrl: '../addEventMenu.html',
 })
-
 export class AddEventComponent {
-  type = 'Private';
-  isApproved = '1';
-  owner = this.cookieService.get('User_Name');
+  private readonly type = 'Private';
+  private readonly isApproved = '1';
+  private readonly owner = this.cookieService.get(this.globalsService.cookieKey);
 
   constructor(
     private service: DatabaseConnectionService,
@@ -129,11 +118,23 @@ export class AddEventComponent {
     private globalsService: GlobalsService
   ) { }
   addEvent(addEventForm: NgForm) {
-    console.log('hit addEvent method');
-    console.log('start date:');
-    console.log(addEventForm.value.startDate);
-    this.service.addEvent(addEventForm.value.eventName, addEventForm.value.eventDescription,
-      addEventForm.value.startDate, addEventForm.value.endDate, this.type, this.isApproved, this.owner);
+    console.log(`hit addEvent method; event name: '${addEventForm.value.eventName}', description: '${addEventForm.value.eventDescription}'`);
+    const eventName = addEventForm.value.eventName;
+    const eventDescription = addEventForm.value.eventDescription;
+    const startDate = `${addEventForm.value.startDate.toISOString()}`.split('T')[0];
+    const endDate = `${addEventForm.value.endDate.toISOString()}`.split('T')[0];
+
+    this.service.addEvent(eventName, eventDescription, startDate, endDate, this.type, this.isApproved, this.owner).subscribe((data: any) => {
+        // TODO: add success or error message based on response from server
+        console.log('add event data:');
+        console.log(data);
+        if (data.affectedRows > 0) {
+          console.log('success!');
+        }
+      }, (err: any) => {
+        console.error('error adding event:');
+        console.error(err);
+      });
   }
 }
 
