@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Add Event</h2>
 <mat-dialog-content class="mat-typography">
-  <form #addEventForm="ngForm" (ngSubmit)="logIn(addEventForm)">
+  <form #addEventForm="ngForm" (ngSubmit)="addEvent(addEventForm)">
     <mat-form-field>
       <input matInput name="eventName" ngModel #eventName="ngModel" type="text" placeholder="Event Name" autofocus>
     </mat-form-field>

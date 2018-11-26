@@ -15,7 +15,6 @@ import { GlobalsService } from '../globals.service';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-  tableData: any;
   constructor(
     private router: Router,
     private service: DatabaseConnectionService,
@@ -24,16 +23,7 @@ export class WelcomeComponent implements OnInit {
     private globalsService: GlobalsService
   ) { }
 
-  ngOnInit() {
-    this.service.getTableData().subscribe((data: any) => {
-      this.tableData = data;
-      console.log('user table data:');
-      console.log(data);
-    }, (error) => {
-      console.error('error getting data');
-      console.error(error);
-    });
-  }
+  ngOnInit() {}
 
   logIn(f: NgForm) {
     console.log('logIn form value:');
