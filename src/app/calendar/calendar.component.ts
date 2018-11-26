@@ -91,7 +91,7 @@ export class CalendarComponent implements OnInit {
     dialogRef.componentInstance.description = event.meta.description;
     dialogRef.componentInstance.owner = event.meta.owner;
     dialogRef.componentInstance.type = event.meta.type;
-    dialogRef.componentInstance.isEventOwner = (event.meta.owner == this.cookieService.get(this.globalsService.cookieKey))
+    dialogRef.componentInstance.isEventOwner = (event.meta.owner === this.cookieService.get(this.globalsService.cookieKey));
     dialogRef.componentInstance.setValues();
 
     dialogRef.afterClosed().subscribe(result => {
@@ -141,18 +141,17 @@ export class AddEventComponent {
   selector: 'app-view-event',
   templateUrl: '../viewEventMenu.html',
 })
-export class ViewEventComponent{
- 
+export class ViewEventComponent {
   form: FormGroup = new FormGroup({});
-  editMode: boolean = false;
-  eventId: string = "";
-  title: string = "";
+  editMode = false;
+  eventId = '';
+  title = '';
   startDate: Date = new Date();
   endDate: Date = new Date();
-  description: string = "";
-  owner: string = "";
-  type: string = "";
-  isEventOwner: boolean = false;
+  description = '';
+  owner = '';
+  type = '';
+  isEventOwner = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -160,18 +159,17 @@ export class ViewEventComponent{
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService
-  ) { 
-  }
+  ) {}
 
-  setValues(){
+  setValues() {
     this.form = new FormGroup({
-      eventName : new FormControl({value: this.title, disabled:true}),
-      startDate : new FormControl({value: this.startDate, disabled:true}),
-      endDate: new FormControl({value: this.endDate, disabled:true})
+      eventName : new FormControl({value: this.title, disabled: true}),
+      startDate : new FormControl({value: this.startDate, disabled: true}),
+      endDate: new FormControl({value: this.endDate, disabled: true})
     });
   }
 
-  editEvent(){
+  editEvent() {
     this.editMode = true;
     this.form.setValue({
       eventName : this.title,
@@ -181,7 +179,7 @@ export class ViewEventComponent{
     this.form.enable();
   }
 
-  viewEvent(){
+  viewEvent() {
     this.editMode = false;
     this.form.setValue({
       eventName : this.title,
@@ -191,7 +189,7 @@ export class ViewEventComponent{
     this.form.disable();
   }
 
-  deleteEvent(){
+  deleteEvent() {
     this.service.deleteEvent(this.eventId).subscribe((data: any) => {
       this.snackBar.open(`Event deleted from app`, '', {
         duration: 3000
@@ -199,21 +197,21 @@ export class ViewEventComponent{
     });
   }
 
-  submitEdits(editEventForm: NgForm){
-    this.service.editEvent(this.eventId, editEventForm.value.eventName, 
-      editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '), 
+  submitEdits(editEventForm: NgForm) {
+    this.service.editEvent(this.eventId, editEventForm.value.eventName,
+      editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '),
       editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
       this.snackBar.open(`Event edits saved`, '', {
         duration: 3000
       });
-    })
+    });
   }
 
-  unsubscribe(){
+  unsubscribe() {
     this.service.unsubscribeFromEvent(this.cookieService.get('calendarid'), this.eventId).subscribe((data: any) => {
       this.snackBar.open(`Event removed from calendar`, '', {
         duration: 3000
       });
-    })
+    });
   }
 }
