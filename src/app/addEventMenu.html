@@ -4,17 +4,16 @@
     <mat-form-field>
       <input matInput name="eventName" ngModel #eventName="ngModel" type="text" placeholder="Event Name" autofocus>
     </mat-form-field>
-    <br/>
     <mat-form-field>
-      <input matInput name="eventDescription" ngModel #eventDescription="ngModel" type="text" placeholder="Event Description">
+      <input matInput name="eventDescription" ngModel #eventName="ngModel" type="text" placeholder="Event Description" autofocus>
     </mat-form-field>
-    <br/>
+    <p></p>
     <mat-form-field>
       <input matInput [matDatepicker]="startDate" name="startDate" ngModel placeholder="Start Date">
       <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
       <mat-datepicker #startDate></mat-datepicker>
     </mat-form-field>
-    <br/>
+    <p></p>
     <mat-form-field>
       <input matInput [matDatepicker]="endDate" name="endDate" ngModel placeholder="End Date">
       <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
@@ -24,5 +23,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Close</button>
-  <button mat-button (click)="addEvent(addEventForm)" mat-dialog-close>Add Event</button>
+  <button mat-button (click)="addEvent(addEventForm)">Add Event</button>
 </mat-dialog-actions>

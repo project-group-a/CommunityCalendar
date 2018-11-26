@@ -26,6 +26,8 @@ export class WelcomeComponent implements OnInit {
   ngOnInit() {}
 
   logIn(f: NgForm) {
+    console.log('logIn form value:');
+    console.log(f.value);
     this.service.signIn(f.value.username, f.value.password).subscribe((data: UserTableData[]) => {
       if (data.length > 0) {
         this.cookieService.set(this.globalsService.cookieKey, data[0].User_Name, 3);
