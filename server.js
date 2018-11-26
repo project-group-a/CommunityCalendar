@@ -54,8 +54,7 @@ app.get('/api/data', (req, res) => {
 // https://stackoverflow.com/questions/704194/how-to-hash-passwords-in-mysql
 // https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_sha2
 app.post('/api/addUser', (req, res) => {
-  console.log('hit addUser api; request:');
-  console.log(req.body);
+  console.log('hit addUser api');
   pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
@@ -73,8 +72,7 @@ app.post('/api/addUser', (req, res) => {
 });
 
 app.post('/api/signIn', (req, res) => {
-  console.log('hit sign in API; request:');
-  console.log(req.body);
+  console.log(`hit sign in API for user '${req.body.username}'`);
   pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
@@ -101,12 +99,12 @@ app.post('/api/addEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) SELECT '${req.body.eventName}', '${req.body.eventDescription}', User_Name, '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '1' FROM User WHERE User_Name = '${req.body.owner}';`, (err, result) => {
+    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) VALUES ('${req.body.eventName}', '${req.body.eventDescription}', '${req.body.owner}', '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '${req.body.isApproved}')`, (err, result) => {
       connection.release();
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
