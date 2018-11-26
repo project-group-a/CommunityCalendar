@@ -66,7 +66,7 @@ app.post('/api/addUser', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.json(200);
+        res.json(200).json(result);
       }
     });
   });
@@ -106,7 +106,7 @@ app.post('/api/addEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
@@ -125,7 +125,7 @@ app.post('/api/editEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
@@ -149,7 +149,7 @@ app.post('/api/deleteEvent', (req, res) => {
           if (err) {
             res.status(500).json(err);
           } else {
-            res.status(200);
+            res.status(200).json(result);
           }
         });
       } 
@@ -170,7 +170,7 @@ app.post('/api/subscribeToEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
@@ -189,7 +189,7 @@ app.post('/api/unsubscribeFromEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
