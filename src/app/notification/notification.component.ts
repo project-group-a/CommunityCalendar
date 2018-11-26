@@ -25,7 +25,7 @@ import {
 
     public filter() {
       this.events = [];
-      this.service.getEvents(this.query).subscribe((data: any) => {
+      this.service.getNotification(this.cookieService.get('calendarid')).subscribe((data: any) => {
         for (const row of data) {
             this.events.push({
               start: new Date(row['Event_Date_Start']),
@@ -42,7 +42,7 @@ import {
     }
 
     public subscribe(id: number) {
-      this.service.subscribeFromNotification(this.cookieService.get('calendarid'), id.toString()).subscribe((data: any) => {
+      this.service.subscribeToEvent(this.cookieService.get('calendarid'), id.toString()).subscribe((data: any) => {
         this.snackBar.open(`Event added to calendar`, '', {
           duration: 3000
         });
