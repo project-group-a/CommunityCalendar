@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>Add Event</h2>
+
 <mat-dialog-content class="mat-typography">
   <form #addEventForm="ngForm" (ngSubmit)="addEvent(addEventForm)">
     <mat-form-field>
@@ -13,15 +14,21 @@
       <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
       <mat-datepicker #startDate></mat-datepicker>
     </mat-form-field>
+    <mat-form-field>
+      <input matInput name="startTime" type="time" ngModel placeholder="Start Time">
+    </mat-form-field>
     <p></p>
     <mat-form-field>
       <input matInput [matDatepicker]="endDate" name="endDate" ngModel placeholder="End Date">
       <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
       <mat-datepicker #endDate></mat-datepicker>
     </mat-form-field>
+    <mat-form-field>
+      <input matInput name="endTime" type="time" ngModel placeholder="End Time">
+    </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Close</button>
-  <button mat-button (click)="addEvent(addEventForm)">Add Event</button>
+  <button mat-button (click)="addEvent(addEventForm)" mat-dialog-close>Add Event</button>
 </mat-dialog-actions>

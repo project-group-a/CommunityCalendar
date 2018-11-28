@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialog, MatSnackBar, MatNativeDateModule} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
@@ -52,6 +53,7 @@ export class CalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
 
   constructor(public datePicker: MatDatepickerModule,
+    public timePicker: OwlDateTimeModule,
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService,
@@ -119,9 +121,13 @@ export class CalendarComponent implements OnInit {
 })
 
 export class AddEventComponent {
-  type = 'Private';
+  type = 'Public';
   isApproved = '1';
-  owner = this.cookieService.get('User_Name');
+  owner = this.cookieService.get(this.globalsService.cookieKey);
+  startDate: String = '';
+  startTime: String = '';
+  endDate: String = '';
+  endTime: String = '';
 
   constructor(
     private service: DatabaseConnectionService,
@@ -131,11 +137,21 @@ export class AddEventComponent {
     private globalsService: GlobalsService
   ) { }
   addEvent(addEventForm: NgForm) {
+    this.startDate = addEventForm.value.startDate.toISOString().slice(0, 10);
+    this.startTime = addEventForm.value.startTime.toString();
+    this.endDate = addEventForm.value.endDate.toISOString().slice(0, 10);
+    this.endTime = addEventForm.value.endTime.toString();
+
+    this.startDate = this.startDate.toString() + ' ' + this.startTime.toString() + ':00';
+    this.endDate = this.endDate.toString() + ' ' + this.endTime.toString() + ':00';
+
+    console.log(this.startDate);
+    console.log(this.endDate);
+
     console.log('hit addEvent method');
-    console.log('start date:');
-    console.log(addEventForm.value.startDate);
+    console.log(this.owner);
     this.service.addEvent(addEventForm.value.eventName, addEventForm.value.eventDescription,
-      addEventForm.value.startDate, addEventForm.value.endDate, this.type, this.isApproved, this.owner);
+      this.startDate.toString(), this.endDate.toString(), this.type, this.isApproved, this.owner);
   }
 }
 
@@ -145,14 +161,14 @@ export class AddEventComponent {
 })
 export class ViewEventComponent {
   form: FormGroup = new FormGroup({});
-  editMode: boolean = false;
-  eventId: string = '';
-  title: string = '';
+  editMode: Boolean = false;
+  eventId: String = '';
+  title: String = '';
   startDate: Date = new Date();
   endDate: Date = new Date();
-  description: string = '';
-  owner: string = '';
-  type: string = '';
+  description: String = '';
+  owner: String = '';
+  type: String = '';
   isEventOwner = false;
 
   constructor(
@@ -192,7 +208,7 @@ export class ViewEventComponent {
   }
 
   deleteEvent() {
-    this.service.deleteEvent(this.eventId).subscribe((data: any) => {
+    this.service.deleteEvent(this.eventId.toString()).subscribe((data: any) => {
       this.snackBar.open(`Event deleted from app`, '', {
         duration: 3000
       });
@@ -200,7 +216,7 @@ export class ViewEventComponent {
   }
 
   submitEdits(editEventForm: NgForm) {
-    this.service.editEvent(this.eventId, editEventForm.value.eventName,
+    this.service.editEvent(this.eventId.toString(), editEventForm.value.eventName,
       editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '),
       editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
       this.snackBar.open(`Event edits saved`, '', {
@@ -210,7 +226,7 @@ export class ViewEventComponent {
   }
 
   unsubscribe() {
-    this.service.unsubscribeFromEvent(this.cookieService.get('calendarid'), this.eventId).subscribe((data: any) => {
+    this.service.unsubscribeFromEvent(this.cookieService.get('calendarid'), this.eventId.toString()).subscribe((data: any) => {
       this.snackBar.open(`Event removed from calendar`, '', {
         duration: 3000
       });
@@ -220,7 +236,6 @@ export class ViewEventComponent {
   openInviteUsers(): void {
     const dialogRef = this.dialog.open(InviteUsersComponent);
     dialogRef.componentInstance.eventId = this.eventId;
-    
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
@@ -231,8 +246,8 @@ export class ViewEventComponent {
   selector: 'app-invite-users',
   templateUrl: '../inviteUsers.html',
 })
-export class InviteUsersComponent implements OnInit{
-  eventId: string = '';
+export class InviteUsersComponent implements OnInit {
+  eventId: String = '';
   users = new FormControl();
   userList: string[] = [];
 
@@ -244,25 +259,25 @@ export class InviteUsersComponent implements OnInit{
     private cookieService: CookieService
   ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.getUsers();
   }
 
-  getUsers(){
+  getUsers() {
     this.service.getUsers().subscribe((data: any) => {
-      for(const row of data){
-        this.userList.push(row["User_Name"]);
+      for (const row of data) {
+        this.userList.push(row['User_Name']);
       }
-    })
+    });
   }
 
   invite() {
-    for(const user of this.users.value){
-      this.service.inviteUser(user, this.eventId).subscribe((data: any) => {
+    for (const user of this.users.value) {
+      this.service.inviteUser(user, this.eventId.toString()).subscribe((data: any) => {
         this.snackBar.open(`Successfully invited ${user}`, '', {
           duration: 3000
         });
-      })
+      });
     }
   }
 }
