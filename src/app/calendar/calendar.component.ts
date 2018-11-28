@@ -145,14 +145,14 @@ export class AddEventComponent {
 })
 export class ViewEventComponent {
   form: FormGroup = new FormGroup({});
-  editMode = false;
-  eventId = '';
-  title = '';
+  editMode: boolean = false;
+  eventId: string = '';
+  title: string = '';
   startDate: Date = new Date();
   endDate: Date = new Date();
-  description = '';
-  owner = '';
-  type = '';
+  description: string = '';
+  owner: string = '';
+  type: string = '';
   isEventOwner = false;
 
   constructor(
@@ -215,5 +215,54 @@ export class ViewEventComponent {
         duration: 3000
       });
     });
+  }
+
+  openInviteUsers(): void {
+    const dialogRef = this.dialog.open(InviteUsersComponent);
+    dialogRef.componentInstance.eventId = this.eventId;
+    
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+}
+
+@Component({
+  selector: 'app-invite-users',
+  templateUrl: '../inviteUsers.html',
+})
+export class InviteUsersComponent implements OnInit{
+  eventId: string = '';
+  users = new FormControl();
+  userList: string[] = [];
+
+  constructor(
+    private snackBar: MatSnackBar,
+    private service: DatabaseConnectionService,
+    public dialog: MatDialog,
+    public router: Router,
+    private cookieService: CookieService
+  ) {}
+
+  ngOnInit(){
+    this.getUsers();
+  }
+
+  getUsers(){
+    this.service.getUsers().subscribe((data: any) => {
+      for(const row of data){
+        this.userList.push(row["User_Name"]);
+      }
+    })
+  }
+
+  invite() {
+    for(const user in this.users.value){
+      this.service.inviteUser(user, this.eventId).subscribe((data: any) => {
+        this.snackBar.open(`Successfully invited ${user}`, '', {
+          duration: 3000
+        });
+      })
+    }
   }
 }

@@ -34,7 +34,7 @@ app.use(express.static(__dirname + '/dist/my-project'));
 app.use(express.json());
 
 // https://coderwall.com/p/0itzzw/prevent-node-mysql-connection-closed-error
-app.get('/api/data', (req, res) => {
+app.get('/api/getUsers', (req, res) => {
   pool.getConnection(function(err, connection) {
     connection.on('error', function(err) {
       console.log('error getting connection:');
@@ -43,8 +43,7 @@ app.get('/api/data', (req, res) => {
     connection.query('SELECT * FROM User', (err, rows) => {
       connection.release();
       if (err) {
-        console.log(err);
-        throw err;
+        res.status(500).json(err);
       }
       res.status(200).json(rows);
     });
@@ -165,13 +164,19 @@ app.post('/api/subscribeToEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
-      connection.release();
+    connection.query(`DELETE FROM Calendar WHERE Calendar_Id = ${req.body.calendarid} AND Event_Id = ${req.body.eventid}`, (err, result) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200).json(result);
-      }
+        connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
+          connection.release();
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            res.status(200).json(result);
+          }
+        });
+      } 
     });
   });
 });
@@ -212,6 +217,24 @@ app.get('/api/getCalendar', (req, res) => {
   });
 });
 
+app.get('/api/getNotification', (req, res) => {
+
+  pool.getConnection(function(err, connection) {
+    connection.on('error', function(err) {
+      console.log('error getting connection:');
+      console.log(err);
+    });
+    connection.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}' AND Is_Subscribed = '0')`, (err, rows, fields) => {
+      connection.release();
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      res.status(200).json(rows);
+    });
+  });
+});
+
 app.get('/api/getEvents', (req, res) => {
   console.log('hit get events api...');
   pool.getConnection(function(err, connection) {
@@ -226,6 +249,25 @@ app.get('/api/getEvents', (req, res) => {
         throw err;
       }
       res.status(200).json(rows);
+    });
+  });
+});
+
+app.post('/api/inviteUser', (req, res) => {
+  console.log('hit invite user API; request:');
+  console.log(req.body);
+  pool.getConnection(function(err, connection) {
+    connection.on('error', function(err) {
+      console.log('error getting connection:');
+      console.log(err);
+    });
+    connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values ((SELECT Calendar_Id FROM User WHERE User_Name = ${req.body.user}),${req.body.eventid},0)`, (err, result) => {
+      connection.release();
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.status(200);
+      }
     });
   });
 });
