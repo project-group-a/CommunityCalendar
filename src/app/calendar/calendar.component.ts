@@ -167,7 +167,8 @@ export class ViewEventComponent {
     this.form = new FormGroup({
       eventName : new FormControl({value: this.title, disabled: true}),
       startDate : new FormControl({value: this.startDate, disabled: true}),
-      endDate: new FormControl({value: this.endDate, disabled: true})
+      endDate: new FormControl({value: this.endDate, disabled: true}),
+      eventDescription: new FormControl({value: this.description, disabled: true})
     });
   }
 
@@ -176,7 +177,8 @@ export class ViewEventComponent {
     this.form.setValue({
       eventName : this.title,
       startDate : this.startDate,
-      endDate: this.endDate
+      endDate: this.endDate,
+      eventDescription: this.description
     });
     this.form.enable();
   }
@@ -186,7 +188,8 @@ export class ViewEventComponent {
     this.form.setValue({
       eventName : this.title,
       startDate : this.startDate,
-      endDate: this.endDate
+      endDate: this.endDate,
+      eventDescription: this.description
     });
     this.form.disable();
   }
@@ -200,12 +203,12 @@ export class ViewEventComponent {
   }
 
   submitEdits(editEventForm: NgForm) {
-    this.service.editEvent(this.eventId, editEventForm.value.eventName,
+    this.service.editEvent(this.eventId, editEventForm.value.eventName, editEventForm.value.description,
       editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '),
       editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
-      this.snackBar.open(`Event edits saved`, '', {
-        duration: 3000
-      });
+        this.snackBar.open(`Event edits saved`, '', {
+          duration: 3000
+        });
     });
   }
 

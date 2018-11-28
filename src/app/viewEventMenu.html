@@ -5,6 +5,10 @@
       <input matInput formControlName="eventName" type="text" class="form-control" placeholder="Event Name">
     </mat-form-field>
     <mat-form-field>
+      <input matInput formControlName="eventDescription" type="text" placeholder="Event Description">
+    </mat-form-field>
+    <p></p>
+    <mat-form-field>
       <input matInput [matDatepicker]="startDate" formControlName="startDate" class="form-control" placeholder="Start Date">
       <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
       <mat-datepicker #startDate></mat-datepicker>
