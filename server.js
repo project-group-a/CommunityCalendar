@@ -164,13 +164,20 @@ app.post('/api/subscribeToEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
-      connection.release();
+    connection.query(`DELETE FROM Calendar WHERE Calendar_Id = ${req.body.calendarid} AND Event_Id = ${req.body.eventid}`, (err, result) => {
       if (err) {
         res.status(500).json(err);
-      } else {
-        res.status(200);
       }
+      else {
+        connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
+          connection.release();
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            res.status(200);
+          }
+        });
+      } 
     });
   });
 });
@@ -201,6 +208,24 @@ app.get('/api/getCalendar', (req, res) => {
       console.log(err);
     });
     connection.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}')`, (err, rows, fields) => {
+      connection.release();
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      res.status(200).json(rows);
+    });
+  });
+});
+
+app.get('/api/getNotification', (req, res) => {
+
+  pool.getConnection(function(err, connection) {
+    connection.on('error', function(err) {
+      console.log('error getting connection:');
+      console.log(err);
+    });
+    connection.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}' AND Is_Subscribed = '0')`, (err, rows, fields) => {
       connection.release();
       if (err) {
         console.log(err);

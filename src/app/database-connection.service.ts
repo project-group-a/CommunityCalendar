@@ -38,7 +38,7 @@ export class DatabaseConnectionService {
   private readonly editEventUrl = '/api/editEvent';
   private readonly deleteEventUrl = '/api/deleteEvent';
   private readonly subscribeToEventUrl = '/api/subscribeToEvent';
-  private readonly subscribeFromNotificationUrl = '/api/subscribeFromNotificationEvent';
+  private readonly getNotificationUrl = '/api/getNotification?Calendar_Id={Calendar_Id}';
   private readonly unsubscribeFromEventUrl = '/api/unsubscribeFromEvent';
   private readonly inviteUserUrl = '/api/inviteUser';
   constructor(private http: HttpClient) {}
@@ -119,12 +119,8 @@ export class DatabaseConnectionService {
     return this.http.post(this.subscribeToEventUrl, requestBody, httpOptions);
   }
 
-  subscribeFromNotification(calendarId: string, eventId: string) {
-    const requestBody = {
-      calendarid: calendarId,
-      eventid: eventId
-    };
-    return this.http.post(this.subscribeFromNotificationUrl, requestBody, httpOptions)
+  getNotification(calendarid: string) {
+    return this.http.get<EventTableData[]>(this.getNotificationUrl.replace('{Calendar_Id}', calendarid));
   }
 
   unsubscribeFromEvent(calendarId: string, eventId: string){
