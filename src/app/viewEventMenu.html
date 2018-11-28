@@ -18,6 +18,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" *ngIf="isEventOwner">
+    <button mat-button (click)="openInviteUsers()">Invite Users</button>
     <button mat-button (click)="deleteEvent()" mat-dialog-close>Delete</button>
     <button mat-button (click)="submitEdits(editEventForm)" [disabled]="!editMode">Save Changes</button>
     <button mat-button mat-dialog-close>Close</button>

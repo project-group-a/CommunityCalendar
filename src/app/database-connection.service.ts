@@ -30,6 +30,7 @@ export interface EventTableData {
 export class DatabaseConnectionService {
   private readonly dataUrl = '/api/data';
   private readonly addUserUrl = '/api/addUser';
+  private readonly getUsersUrl = '/api/getUsers';
   private readonly signInUrl = '/api/signIn';
   private readonly getEventsUrl = '/api/getEvents?search={query}';
   private readonly getCalendarUrl = '/api/getCalendar?Calendar_Id={Calendar_Id}';
@@ -39,6 +40,7 @@ export class DatabaseConnectionService {
   private readonly subscribeToEventUrl = '/api/subscribeToEvent';
   private readonly subscribeFromNotificationUrl = '/api/subscribeFromNotificationEvent';
   private readonly unsubscribeFromEventUrl = '/api/unsubscribeFromEvent';
+  private readonly inviteUserUrl = '/api/inviteUser';
   constructor(private http: HttpClient) {}
 
   getTableData() {
@@ -60,6 +62,10 @@ export class DatabaseConnectionService {
       pass: password
     };
     return this.http.post(this.addUserUrl, requestBody, httpOptions);
+  }
+
+  getUsers() {
+    return this.http.get<UserTableData[]>(this.getUsersUrl);
   }
 
   getEvents(query: string) {
@@ -127,5 +133,13 @@ export class DatabaseConnectionService {
       eventid: eventId
     };
     return this.http.post(this.unsubscribeFromEventUrl, requestBody, httpOptions);
+  }
+
+  inviteUser(user: string, eventId: string){
+    const requestBody = {
+      user: user,
+      eventid: eventId
+    };
+    return this.http.post(this.inviteUserUrl, requestBody, httpOptions);
   }
 }

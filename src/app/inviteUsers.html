@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Invite Users</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-form-field>
+        <mat-select placeholder="Select users" [formControl]="users" multiple>
+            <mat-option *ngFor="let user of userList" [value]="user">{{user}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-button (click)="invite()" mat-dialog-close>Invite Selected</button>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

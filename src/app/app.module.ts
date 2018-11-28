@@ -9,7 +9,9 @@ import {
   MatCheckboxModule,
   MatButtonToggleModule,
   MatIconModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatSelectModule,
+  MatOptionModule
 } from '@angular/material';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
@@ -29,11 +31,9 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
 import {DialogContentComponent} from './header/header.component';
-import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarComponent, AddEventComponent, ViewEventComponent, InviteUsersComponent } from './calendar/calendar.component';
 import { ListComponent } from './list/list.component';
 import { NotificationComponent } from './notification/notification.component';
-import { AddEventComponent} from './calendar/calendar.component';
-import { ViewEventComponent} from './calendar/calendar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeaderComponent } from './header/header.component';
@@ -48,6 +48,7 @@ import { HttpClientModule } from '@angular/common/http';
     DialogContentComponent,
     AddEventComponent,
     ViewEventComponent,
+    InviteUsersComponent,
     CalendarComponent,
     ListComponent,
     NotificationComponent,
@@ -83,9 +84,11 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatSnackBarModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule,
+    MatOptionModule
   ],
-  entryComponents: [AppComponent, DialogContentComponent, AddEventComponent, ViewEventComponent],
+  entryComponents: [AppComponent, DialogContentComponent, AddEventComponent, ViewEventComponent, InviteUsersComponent],
   providers: [CookieService, MatDatepickerModule],
   bootstrap: [AppComponent]
 })
