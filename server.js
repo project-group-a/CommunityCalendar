@@ -100,12 +100,20 @@ app.post('/api/addEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) VALUES ('${req.body.eventName}', '${req.body.eventDescription}', '${req.body.owner}', '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '${req.body.isApproved}')`, (err, result) => {
-      connection.release();
+    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) VALUES ('${req.body.eventName}', '${req.body.eventDescription}', '${req.body.owner}', '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '1');`, (err, result) => {
+
       if (err) {
+        connection.release();
         res.status(500).json(err);
       } else {
-        res.status(200).json(result);
+        connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values ((SELECT Calendar_Id FROM User WHERE User_Name = '${req.body.owner}'),(SELECT Event_Id FROM Event WHERE Event_Name = '${req.body.eventName}' AND Event_Owner = '${req.body.owner}' LIMIT 1),1)`, (err, result) => {
+          connection.release();
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            res.status(200).json(result);
+          }
+        });
       }
     });
   });
@@ -140,6 +148,7 @@ app.post('/api/deleteEvent', (req, res) => {
     });
     connection.query(`DELETE FROM Event WHERE Event_Id = '${req.body.id}'`, (err, result) => {
       if (err) {
+        connection.release();
         res.status(500).json(err);
       }
       else {
@@ -166,6 +175,7 @@ app.post('/api/subscribeToEvent', (req, res) => {
     });
     connection.query(`DELETE FROM Calendar WHERE Calendar_Id = ${req.body.calendarid} AND Event_Id = ${req.body.eventid}`, (err, result) => {
       if (err) {
+        connection.release();
         res.status(500).json(err);
       } else {
         connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {

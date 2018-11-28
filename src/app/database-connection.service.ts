@@ -94,10 +94,11 @@ export class DatabaseConnectionService {
     return this.http.post(this.addEventUrl, requestBody, httpOptions);
   }
 
-  editEvent(eventId: string, eventName: string, eventStart: string, eventEnd: string) {
+  editEvent(eventId: string, eventName: string, eventDescription: string, eventStart: string, eventEnd: string) {
     const requestBody = {
       eventId,
       eventName,
+      eventDescription,
       eventStart,
       eventEnd
     };

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialog, MatSnackBar, MatNativeDateModule} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalsService } from '../globals.service';
@@ -53,7 +52,6 @@ export class CalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
 
   constructor(public datePicker: MatDatepickerModule,
-    public timePicker: OwlDateTimeModule,
     public dialog: MatDialog,
     public router: Router,
     private cookieService: CookieService,
@@ -124,12 +122,13 @@ export class AddEventComponent {
   type = 'Public';
   isApproved = '1';
   owner = this.cookieService.get(this.globalsService.cookieKey);
-  startDate: String = '';
+  startDate: Date = new Date;
   startTime: String = '';
-  endDate: String = '';
+  endDate: Date = new Date();
   endTime: String = '';
 
   constructor(
+    private snackBar: MatSnackBar,
     private service: DatabaseConnectionService,
     public dialog: MatDialog,
     public router: Router,
@@ -142,8 +141,8 @@ export class AddEventComponent {
     this.endDate = addEventForm.value.endDate.toISOString().slice(0, 10);
     this.endTime = addEventForm.value.endTime.toString();
 
-    this.startDate = this.startDate.toString() + ' ' + this.startTime.toString() + ':00';
-    this.endDate = this.endDate.toString() + ' ' + this.endTime.toString() + ':00';
+    var startDateTime = this.startDate.toString() + ' ' + this.startTime.toString() + ':00';
+    var endDateTime = this.endDate.toString() + ' ' + this.endTime.toString() + ':00';
 
     console.log(this.startDate);
     console.log(this.endDate);
@@ -151,16 +150,12 @@ export class AddEventComponent {
     console.log('hit addEvent method');
     console.log(this.owner);
     this.service.addEvent(addEventForm.value.eventName, addEventForm.value.eventDescription,
-      this.startDate.toString(), this.endDate.toString(), this.type, this.isApproved, this.owner).subscribe((data: any) => {
-        console.log('add event data:');
-        console.log(data);
-        if (data.affectedRows > 0) {
-          console.log('success!');
-        }
-      }, (err: any) => {
-        console.error('error adding event:');
-        console.error(err);
-      });
+      startDateTime, endDateTime, this.type, this.isApproved, this.owner).subscribe((data: any) => {
+        this.snackBar.open(`Event added`, '', {
+          duration: 3000
+        });
+    });
+
   }
 }
 
@@ -192,7 +187,8 @@ export class ViewEventComponent {
     this.form = new FormGroup({
       eventName : new FormControl({value: this.title, disabled: true}),
       startDate : new FormControl({value: this.startDate, disabled: true}),
-      endDate: new FormControl({value: this.endDate, disabled: true})
+      endDate: new FormControl({value: this.endDate, disabled: true}),
+      eventDescription: new FormControl({value: this.description, disabled: true})
     });
   }
 
@@ -201,7 +197,8 @@ export class ViewEventComponent {
     this.form.setValue({
       eventName : this.title,
       startDate : this.startDate,
-      endDate: this.endDate
+      endDate: this.endDate,
+      eventDescription: this.description
     });
     this.form.enable();
   }
@@ -211,7 +208,8 @@ export class ViewEventComponent {
     this.form.setValue({
       eventName : this.title,
       startDate : this.startDate,
-      endDate: this.endDate
+      endDate: this.endDate,
+      eventDescription: this.description
     });
     this.form.disable();
   }
@@ -225,12 +223,12 @@ export class ViewEventComponent {
   }
 
   submitEdits(editEventForm: NgForm) {
-    this.service.editEvent(this.eventId.toString(), editEventForm.value.eventName,
+    this.service.editEvent(this.eventId.toString(), editEventForm.value.eventName, editEventForm.value.eventDescription,
       editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '),
       editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
-      this.snackBar.open(`Event edits saved`, '', {
-        duration: 3000
-      });
+        this.snackBar.open(`Event edits saved`, '', {
+          duration: 3000
+        });
     });
   }
 
