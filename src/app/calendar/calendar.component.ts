@@ -151,7 +151,16 @@ export class AddEventComponent {
     console.log('hit addEvent method');
     console.log(this.owner);
     this.service.addEvent(addEventForm.value.eventName, addEventForm.value.eventDescription,
-      this.startDate.toString(), this.endDate.toString(), this.type, this.isApproved, this.owner);
+      this.startDate.toString(), this.endDate.toString(), this.type, this.isApproved, this.owner).subscribe((data: any) => {
+        console.log('add event data:');
+        console.log(data);
+        if (data.affectedRows > 0) {
+          console.log('success!');
+        }
+      }, (err: any) => {
+        console.error('error adding event:');
+        console.error(err);
+      });
   }
 }
 
