@@ -155,6 +155,7 @@ export class AddEventComponent {
           duration: 3000
         });
     });
+
   }
 }
 

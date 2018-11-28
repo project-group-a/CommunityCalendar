@@ -89,7 +89,6 @@ export class DatabaseConnectionService {
       owner
     };
 
-
     console.log('hit add event in connection service; requestbody:');
     console.log(requestBody);
     return this.http.post(this.addEventUrl, requestBody, httpOptions);
