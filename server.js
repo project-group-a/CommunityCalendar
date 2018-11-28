@@ -100,12 +100,12 @@ app.post('/api/addEvent', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) SELECT '${req.body.eventName}', '${req.body.eventDescription}', User_Name, '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '1' FROM User WHERE User_Name = '${req.body.owner}';`, (err, result) => {
+    connection.query(`INSERT INTO Event (Event_Name, Event_Description, Event_Owner, Event_Date_Start, Event_Date_End, Event_Type, Is_Approved) VALUES ('${req.body.eventName}', '${req.body.eventDescription}', '${req.body.owner}', '${req.body.startDate}', '${req.body.endDate}', '${req.body.type}', '1');`, (err, result) => {
       if (err) {
         connection.release();
         res.status(500).json(err);
       } else {
-        connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values ((SELECT Calendar_Id FROM User WHERE User_Name = '${req.body.owner}'),(SELECT TOP 1 Event_Id FROM Event WHERE Event_Name = '${req.body.eventName}' AND Event_Owner = '${req.body.owner}'),1)`, (err, result) => {
+        connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values ((SELECT Calendar_Id FROM User WHERE User_Name = '${req.body.owner}'),(SELECT Event_Id FROM Event WHERE Event_Name = '${req.body.eventName}' AND Event_Owner = '${req.body.owner}' LIMIT 1),1)`, (err, result) => {
           connection.release();
           if (err) {
             res.status(500).json(err);

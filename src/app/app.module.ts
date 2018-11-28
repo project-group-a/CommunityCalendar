@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -26,6 +26,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { CookieService } from 'ngx-cookie-service';
 
@@ -84,12 +85,14 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatSnackBarModule,
     MatDatepickerModule,
+    OwlDateTimeModule,
     MatNativeDateModule,
     MatSelectModule,
     MatOptionModule
   ],
   entryComponents: [AppComponent, DialogContentComponent, AddEventComponent, ViewEventComponent, InviteUsersComponent],
-  providers: [CookieService, MatDatepickerModule],
-  bootstrap: [AppComponent]
+  providers: [CookieService, MatDatepickerModule, OwlDateTimeModule],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

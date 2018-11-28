@@ -76,7 +76,8 @@ export class DatabaseConnectionService {
     return this.http.get<EventTableData[]>(this.getCalendarUrl.replace('{Calendar_Id}', calendarid));
   }
 
-  addEvent(eventName: string, eventDescription: string, startDate: Date, endDate: Date, type: string, isApproved: string, owner: string) {
+  addEvent(eventName: string, eventDescription: string, startDate:
+    string, endDate: string, type: string, isApproved: string, owner: string) {
     // date should be in the format 'YYYY-MM-DD HH:MM:SS'
     const requestBody = {
       eventName,
