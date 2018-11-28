@@ -257,7 +257,7 @@ export class InviteUsersComponent implements OnInit{
   }
 
   invite() {
-    for(const user in this.users.value){
+    for(const user of this.users.value){
       this.service.inviteUser(user, this.eventId).subscribe((data: any) => {
         this.snackBar.open(`Successfully invited ${user}`, '', {
           duration: 3000
