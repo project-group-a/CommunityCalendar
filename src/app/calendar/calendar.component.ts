@@ -96,6 +96,7 @@ export class CalendarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.refresh.next();
     });
   }
   openEventAdd(): void {
@@ -103,6 +104,7 @@ export class CalendarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.refresh.next();
     });
   }
 

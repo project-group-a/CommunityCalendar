@@ -65,7 +65,7 @@ app.post('/api/addUser', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.json(200);
+        res.json(200).json(result);
       }
     });
   });
@@ -105,7 +105,7 @@ app.post('/api/addEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
@@ -124,7 +124,7 @@ app.post('/api/editEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
@@ -148,7 +148,7 @@ app.post('/api/deleteEvent', (req, res) => {
           if (err) {
             res.status(500).json(err);
           } else {
-            res.status(200);
+            res.status(200).json(result);
           }
         });
       } 
@@ -167,14 +167,13 @@ app.post('/api/subscribeToEvent', (req, res) => {
     connection.query(`DELETE FROM Calendar WHERE Calendar_Id = ${req.body.calendarid} AND Event_Id = ${req.body.eventid}`, (err, result) => {
       if (err) {
         res.status(500).json(err);
-      }
-      else {
+      } else {
         connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values (${req.body.calendarid},${req.body.eventid},1)`, (err, result) => {
           connection.release();
           if (err) {
             res.status(500).json(err);
           } else {
-            res.status(200);
+            res.status(200).json(result);
           }
         });
       } 
@@ -195,7 +194,7 @@ app.post('/api/unsubscribeFromEvent', (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        res.status(200);
+        res.status(200).json(result);
       }
     });
   });
