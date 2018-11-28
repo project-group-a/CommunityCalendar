@@ -206,7 +206,7 @@ app.get('/api/getCalendar', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}')`, (err, rows, fields) => {
+    connection.query(`SELECT * FROM Event WHERE Event_Id IN (SELECT Event_Id FROM Calendar WHERE Calendar_Id = '${req.query.Calendar_Id}' AND Is_Subscribed = '1')`, (err, rows, fields) => {
       connection.release();
       if (err) {
         console.log(err);
@@ -261,7 +261,7 @@ app.post('/api/inviteUser', (req, res) => {
       console.log('error getting connection:');
       console.log(err);
     });
-    connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values ((SELECT Calendar_Id FROM User WHERE User_Name = ${req.body.user}),${req.body.eventid},0)`, (err, result) => {
+    connection.query(`INSERT INTO Calendar (Calendar_Id,Event_Id,Is_Subscribed) Values ((SELECT Calendar_Id FROM User WHERE User_Name = '${req.body.user}'),${req.body.eventid},0)`, (err, result) => {
       connection.release();
       if (err) {
         res.status(500).json(err);
