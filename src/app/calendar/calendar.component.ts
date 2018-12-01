@@ -84,10 +84,18 @@ export class CalendarComponent implements OnInit {
 
   eventClicked({event}: {event: CalendarEvent}): void {
     const dialogRef = this.dialog.open(ViewEventComponent);
+
+    dialogRef.componentInstance.endDate = new Date();
+    dialogRef.componentInstance.endTime = "";
+    if(event.end != null){
+      dialogRef.componentInstance.endDate = new Date((event.end.getMonth() + 1) + '/' + event.end.getDate() + '/' + event.end.getFullYear());
+      dialogRef.componentInstance.endTime = event.end.toString().split(" ")[4].substring(0,5);
+    }
+
     dialogRef.componentInstance.eventId = event.meta.id;
     dialogRef.componentInstance.title = event.title;
-    dialogRef.componentInstance.startDate = event.start;
-    dialogRef.componentInstance.endDate = event.end != null ? event.end : new Date();
+    dialogRef.componentInstance.startDate = new Date((event.start.getMonth() + 1) + '/' + event.start.getDate() + '/' + event.start.getFullYear());
+    dialogRef.componentInstance.startTime = event.start.toString().split(" ")[4].substring(0,5);
     dialogRef.componentInstance.description = event.meta.description;
     dialogRef.componentInstance.owner = event.meta.owner;
     dialogRef.componentInstance.type = event.meta.type;
@@ -170,6 +178,8 @@ export class ViewEventComponent {
   title: String = '';
   startDate: Date = new Date();
   endDate: Date = new Date();
+  startTime: string = "";
+  endTime: string = "";
   description: String = '';
   owner: String = '';
   type: String = '';
@@ -188,7 +198,9 @@ export class ViewEventComponent {
       eventName : new FormControl({value: this.title, disabled: true}),
       startDate : new FormControl({value: this.startDate, disabled: true}),
       endDate: new FormControl({value: this.endDate, disabled: true}),
-      eventDescription: new FormControl({value: this.description, disabled: true})
+      eventDescription: new FormControl({value: this.description, disabled: true}),
+      startTime : new FormControl({value: this.startTime, disabled: true}),
+      endTime : new FormControl({value: this.endTime, disabled: true})
     });
   }
 
@@ -198,7 +210,9 @@ export class ViewEventComponent {
       eventName : this.title,
       startDate : this.startDate,
       endDate: this.endDate,
-      eventDescription: this.description
+      eventDescription: this.description,
+      startTime: this.startTime,
+      endTime: this.endTime
     });
     this.form.enable();
   }
@@ -223,9 +237,15 @@ export class ViewEventComponent {
   }
 
   submitEdits(editEventForm: NgForm) {
+    var startDate = editEventForm.value.startDate.toISOString().slice(0, 10);
+    var startTime = editEventForm.value.startTime
+    var endDate = editEventForm.value.endDate.toISOString().slice(0, 10);
+    var endTime = editEventForm.value.endTime;
+
+    var startDateTime = startDate + ' ' + startTime + ':00';
+    var endDateTime = endDate + ' ' + endTime + ':00';
     this.service.editEvent(this.eventId.toString(), editEventForm.value.eventName, editEventForm.value.eventDescription,
-      editEventForm.value.startDate.toISOString().slice(0, 19).replace('T', ' '),
-      editEventForm.value.endDate.toISOString().slice(0, 19).replace('T', ' ')).subscribe((data: any) => {
+      startDateTime, endDateTime).subscribe((data: any) => {
         this.snackBar.open(`Event edits saved`, '', {
           duration: 3000
         });
