@@ -124,7 +124,7 @@ export class DatabaseConnectionService {
     return this.http.get<EventTableData[]>(this.getNotificationUrl.replace('{Calendar_Id}', calendarid));
   }
 
-  unsubscribeFromEvent(calendarId: string, eventId: string){
+  unsubscribeFromEvent(calendarId: string, eventId: string) {
     const requestBody = {
       calendarid: calendarId,
       eventid: eventId
@@ -132,7 +132,7 @@ export class DatabaseConnectionService {
     return this.http.post(this.unsubscribeFromEventUrl, requestBody, httpOptions);
   }
 
-  inviteUser(user: string, eventId: string){
+  inviteUser(user: string, eventId: string) {
     const requestBody = {
       user: user,
       eventid: eventId

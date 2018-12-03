@@ -22,6 +22,7 @@ import {
   addHours
 } from 'date-fns';
 
+/* tslint:disable max-line-length */
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -86,16 +87,16 @@ export class CalendarComponent implements OnInit {
     const dialogRef = this.dialog.open(ViewEventComponent);
 
     dialogRef.componentInstance.endDate = new Date();
-    dialogRef.componentInstance.endTime = "";
-    if(event.end != null){
+    dialogRef.componentInstance.endTime = '';
+    if (event.end != null) {
       dialogRef.componentInstance.endDate = new Date((event.end.getMonth() + 1) + '/' + event.end.getDate() + '/' + event.end.getFullYear());
-      dialogRef.componentInstance.endTime = event.end.toString().split(" ")[4].substring(0,5);
+      dialogRef.componentInstance.endTime = event.end.toString().split(' ')[4].substring(0, 5);
     }
 
     dialogRef.componentInstance.eventId = event.meta.id;
     dialogRef.componentInstance.title = event.title;
     dialogRef.componentInstance.startDate = new Date((event.start.getMonth() + 1) + '/' + event.start.getDate() + '/' + event.start.getFullYear());
-    dialogRef.componentInstance.startTime = event.start.toString().split(" ")[4].substring(0,5);
+    dialogRef.componentInstance.startTime = event.start.toString().split(' ')[4].substring(0, 5);
     dialogRef.componentInstance.description = event.meta.description;
     dialogRef.componentInstance.owner = event.meta.owner;
     dialogRef.componentInstance.type = event.meta.type;
@@ -149,8 +150,8 @@ export class AddEventComponent {
     this.endDate = addEventForm.value.endDate.toISOString().slice(0, 10);
     this.endTime = addEventForm.value.endTime.toString();
 
-    var startDateTime = this.startDate.toString() + ' ' + this.startTime.toString() + ':00';
-    var endDateTime = this.endDate.toString() + ' ' + this.endTime.toString() + ':00';
+    const startDateTime = this.startDate.toString() + ' ' + this.startTime.toString() + ':00';
+    const endDateTime = this.endDate.toString() + ' ' + this.endTime.toString() + ':00';
 
     console.log(this.startDate);
     console.log(this.endDate);
@@ -178,8 +179,8 @@ export class ViewEventComponent {
   title: String = '';
   startDate: Date = new Date();
   endDate: Date = new Date();
-  startTime: string = "";
-  endTime: string = "";
+  startTime = '';
+  endTime = '';
   description: String = '';
   owner: String = '';
   type: String = '';
@@ -237,13 +238,13 @@ export class ViewEventComponent {
   }
 
   submitEdits(editEventForm: NgForm) {
-    var startDate = editEventForm.value.startDate.toISOString().slice(0, 10);
-    var startTime = editEventForm.value.startTime
-    var endDate = editEventForm.value.endDate.toISOString().slice(0, 10);
-    var endTime = editEventForm.value.endTime;
+    const startDate = editEventForm.value.startDate.toISOString().slice(0, 10);
+    const startTime = editEventForm.value.startTime;
+    const endDate = editEventForm.value.endDate.toISOString().slice(0, 10);
+    const endTime = editEventForm.value.endTime;
 
-    var startDateTime = startDate + ' ' + startTime + ':00';
-    var endDateTime = endDate + ' ' + endTime + ':00';
+    const startDateTime = startDate + ' ' + startTime + ':00';
+    const endDateTime = endDate + ' ' + endTime + ':00';
     this.service.editEvent(this.eventId.toString(), editEventForm.value.eventName, editEventForm.value.eventDescription,
       startDateTime, endDateTime).subscribe((data: any) => {
         this.snackBar.open(`Event edits saved`, '', {
